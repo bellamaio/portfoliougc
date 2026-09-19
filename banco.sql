@@ -218,6 +218,32 @@ create policy "visitas_publico_insere" on visitas
   with check (true);
 
 
+-- ------------------------------------------------------------
+-- BLOCO 7: tabela TRANSCRICOES  (adicionado depois, na aba "Transcrições")
+-- Guarda vídeos de referência (YouTube, Instagram, TikTok) com o
+-- roteiro transcrito e suas observações. É 100% privada: ninguém de
+-- fora do seu login lê ou escreve aqui, não tem exceção nenhuma.
+-- ------------------------------------------------------------
+create table transcricoes (
+  id uuid primary key default gen_random_uuid(),
+  titulo text not null,
+  link text,
+  plataforma text,
+  roteiro text,
+  observacoes text,
+  criado_em timestamptz not null default now()
+);
+
+alter table transcricoes enable row level security;
+
+-- Só quem está logada (você) pode ler, criar, editar e apagar
+create policy "transcricoes_logada_tudo" on transcricoes
+  for all
+  to authenticated
+  using (true)
+  with check (true);
+
+
 -- ============================================================
 -- FIM. Depois de rodar, veja no arquivo abaixo (ou na mensagem
 -- que a Claude te mandou) como conferir se a trava funcionou.

@@ -529,6 +529,26 @@
   .revisar-textarea{width:100%;min-height:140px;padding:14px;border-radius:var(--radius-md);border:1.5px solid var(--line);margin-bottom:20px;}
   .revisar-bloco{background:var(--card);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);padding:16px 18px;margin-bottom:12px;}
   .revisar-cabecalho{display:flex;align-items:center;gap:10px;font-weight:800;margin-bottom:8px;}
+
+  /* ============ TRANSCRIÇÕES ============ */
+  .p-youtube{background:#fbe0da;color:#a8442a;}
+  .p-instagram{background:#fbe0ee;color:#a8447a;}
+  .p-tiktok{background:#e4defb;color:#5b4aa8;}
+  .p-outro{background:var(--beige);color:var(--ink-soft);}
+
+  .preview-video{
+    aspect-ratio:16/9;
+    border-radius:var(--radius-md);
+    overflow:hidden;
+    background:var(--beige);
+    margin-bottom:16px;
+  }
+  .preview-video iframe{width:100%;height:100%;border:0;display:block;}
+  .preview-sem-embed{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    height:100%;color:var(--ink-soft);font-weight:700;font-size:.85rem;text-align:center;padding:20px;
+  }
+  .preview-sem-embed a{text-decoration:underline;}
 </style>
 </head>
 <body>
@@ -550,6 +570,7 @@
         <button class="nav-item" data-aba="calendario"></button>
         <button class="nav-item" data-aba="campanhas"></button>
         <button class="nav-item" data-aba="checklist"></button>
+        <button class="nav-item" data-aba="transcricoes"></button>
       </div>
     </nav>
     <div class="sidebar-rodape">
@@ -740,6 +761,32 @@
       </div>
     </section>
 
+    <!-- ================= ABA TRANSCRIÇÕES ================= -->
+    <section class="aba" id="aba-transcricoes">
+      <div id="avisoTranscricoes"></div>
+      <div class="toolbar">
+        <div class="campo-busca">
+          <span id="iconeBuscaTranscricoes"></span>
+          <input type="text" id="buscaTranscricoes" placeholder="Buscar por título">
+        </div>
+        <button class="btn btn-primario" id="btnNovaTranscricao"></button>
+      </div>
+      <div class="tabela-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Plataforma</th>
+              <th>Link</th>
+              <th>Salvo em</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="corpoTabelaTranscricoes"></tbody>
+        </table>
+      </div>
+    </section>
+
   </main>
 </div>
 
@@ -769,6 +816,7 @@
     calendario: SVG_ABRE+'<rect x="3" y="4.5" width="18" height="16" rx="2"/><line x1="3" y1="9.5" x2="21" y2="9.5"/><line x1="7.5" y1="2.5" x2="7.5" y2="6.5"/><line x1="16.5" y1="2.5" x2="16.5" y2="6.5"/></svg>',
     campanhas: SVG_ABRE+'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5 7V5.2A1.7 1.7 0 0 1 10.2 3.5h3.6A1.7 1.7 0 0 1 15.5 5.2V7"/><line x1="3" y1="13" x2="21" y2="13"/></svg>',
     checklist: SVG_ABRE+'<rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="7.5 12 10.3 15 16.5 8"/></svg>',
+    transcricoes: SVG_ABRE+'<path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14.5 3v4.5H19"/><line x1="8" y1="12.5" x2="16" y2="12.5"/><line x1="8" y1="16" x2="16" y2="16"/></svg>',
     busca: SVG_ABRE+'<circle cx="10.5" cy="10.5" r="6.5"/><line x1="20" y1="20" x2="15.3" y2="15.3"/></svg>',
     mais: SVG_ABRE+'<line x1="12" y1="4" x2="12" y2="20"/><line x1="4" y1="12" x2="20" y2="12"/></svg>',
     lixo: SVG_ABRE+'<path d="M4.5 7h15"/><path d="M9 7V4.5h6V7"/><path d="M6.5 7l1 12.5h9L17.5 7"/></svg>',
@@ -805,7 +853,9 @@
     buscaMarcas: '',
     filtroCampanhas: 'todas',
     buscaCampanhas: '',
-    ordCampanhas: { coluna: 'prazo', asc: true }
+    ordCampanhas: { coluna: 'prazo', asc: true },
+    transcricoes: [],
+    buscaTranscricoes: ''
   };
 
   const NICHOS_SITE = { beleza:'Beleza', skincare:'Skincare', moda:'Moda', casa:'Casa e Decoração', tech:'Tech' };
@@ -885,7 +935,7 @@
   /* =========================================================
      NAVEGAÇÃO LATERAL
   ========================================================= */
-  const TITULOS_ABA = { portfolio:'Portfólio', marcas:'Marcas', calendario:'Calendário', campanhas:'Campanhas', checklist:'Checklist Portfólio' };
+  const TITULOS_ABA = { portfolio:'Portfólio', marcas:'Marcas', calendario:'Calendário', campanhas:'Campanhas', checklist:'Checklist Portfólio', transcricoes:'Transcrições' };
 
   function montarSidebar(){
     document.querySelector('[data-aba="portfolio"]').innerHTML = ICONES.portfolio + '<span>Portfólio</span>';
@@ -893,11 +943,13 @@
     document.querySelector('[data-aba="calendario"]').innerHTML = ICONES.calendario + '<span>Calendário</span>';
     document.querySelector('[data-aba="campanhas"]').innerHTML = ICONES.campanhas + '<span>Campanhas</span>';
     document.querySelector('[data-aba="checklist"]').innerHTML = ICONES.checklist + '<span>Checklist</span>';
+    document.querySelector('[data-aba="transcricoes"]').innerHTML = ICONES.transcricoes + '<span>Transcrições</span>';
     document.getElementById('btnSair').innerHTML = ICONES.sair + '<span>Sair</span>';
     document.getElementById('btnMenuMobile').innerHTML = ICONES.menu;
     document.getElementById('btnNovoVideo').innerHTML = ICONES.mais + '<span>Novo vídeo</span>';
     document.getElementById('btnNovaMarca').innerHTML = ICONES.mais + '<span>Nova marca</span>';
     document.getElementById('btnNovaCampanha').innerHTML = ICONES.mais + '<span>Nova campanha</span>';
+    document.getElementById('btnNovaTranscricao').innerHTML = ICONES.mais + '<span>Nova transcrição</span>';
     document.getElementById('btnExportarMarcas').innerHTML = ICONES.baixar + '<span>Baixar CSV</span>';
     document.getElementById('btnExportarCampanhas').innerHTML = ICONES.baixar + '<span>Baixar CSV</span>';
     document.getElementById('btnMesAnterior').innerHTML = ICONES.setaEsquerda;
@@ -905,6 +957,7 @@
     document.getElementById('modalFechar').innerHTML = ICONES.fechar;
     document.getElementById('iconeBuscaMarcas').innerHTML = ICONES.busca;
     document.getElementById('iconeBuscaCampanhas').innerHTML = ICONES.busca;
+    document.getElementById('iconeBuscaTranscricoes').innerHTML = ICONES.busca;
 
     document.querySelectorAll('.nav-item').forEach(function(btn){
       btn.addEventListener('click', function(){ irParaAba(btn.dataset.aba); });
@@ -1788,6 +1841,136 @@
   }
 
   /* =========================================================
+     ABA TRANSCRIÇÕES
+  ========================================================= */
+  function detectarPlataforma(link){
+    const l = (link || '').toLowerCase();
+    if(l.includes('youtube.com') || l.includes('youtu.be')) return 'YouTube';
+    if(l.includes('instagram.com')) return 'Instagram';
+    if(l.includes('tiktok.com')) return 'TikTok';
+    return 'Outro';
+  }
+
+  function extrairIdYoutube(link){
+    if(!link) return null;
+    let m = link.match(/[?&]v=([^&]+)/);
+    if(m) return m[1];
+    m = link.match(/youtu\.be\/([^?&]+)/);
+    if(m) return m[1];
+    m = link.match(/youtube\.com\/shorts\/([^?&]+)/);
+    if(m) return m[1];
+    m = link.match(/youtube\.com\/embed\/([^?&]+)/);
+    if(m) return m[1];
+    return null;
+  }
+
+  // Monta o bloco de visualização: embed de verdade quando é YouTube,
+  // e um botão "abrir em outra aba" pros outros casos (Instagram e
+  // TikTok não deixam embutir o vídeo direto sem carregar o app deles).
+  function htmlPreviewVideo(link){
+    if(!link){
+      return '<div class="preview-video"><div class="preview-sem-embed">Cole o link do vídeo acima pra ver o preview aqui.</div></div>';
+    }
+    const plataforma = detectarPlataforma(link);
+    if(plataforma === 'YouTube'){
+      const id = extrairIdYoutube(link);
+      if(id){
+        return '<div class="preview-video"><iframe src="https://www.youtube.com/embed/'+escapeHtml(id)+'" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+      }
+    }
+    return '<div class="preview-video"><div class="preview-sem-embed">Não dá pra mostrar o preview de '+escapeHtml(plataforma)+' aqui dentro.<br><a href="'+escapeHtml(link)+'" target="_blank" rel="noopener">Abrir o vídeo em outra aba</a></div></div>';
+  }
+
+  async function carregarTranscricoes(){
+    limparAviso('avisoTranscricoes');
+    const r = await buscarLista('transcricoes', null);
+    if(!r.ok){ mostrarAviso('avisoTranscricoes', 'Não consegui carregar as transcrições: ' + r.erro, 'erro'); }
+    state.transcricoes = r.dados.slice().sort(function(a,b){ return (b.criado_em||'').localeCompare(a.criado_em||''); });
+    renderTabelaTranscricoes();
+  }
+
+  function transcricoesFiltradas(){
+    const busca = state.buscaTranscricoes.toLowerCase();
+    return state.transcricoes.filter(function(t){
+      return !busca || (t.titulo||'').toLowerCase().includes(busca);
+    });
+  }
+
+  function renderTabelaTranscricoes(){
+    const lista = transcricoesFiltradas();
+    const corpo = document.getElementById('corpoTabelaTranscricoes');
+    if(!state.transcricoes.length){
+      corpo.innerHTML = '<tr><td colspan="5"><p class="placeholder-vazio">Nenhuma transcrição salva ainda. Clique em "Nova transcrição" pra guardar o primeiro vídeo de referência.</p></td></tr>';
+      return;
+    }
+    if(!lista.length){
+      corpo.innerHTML = '<tr><td colspan="5"><p class="placeholder-vazio">Nada encontrado com essa busca.</p></td></tr>';
+      return;
+    }
+    corpo.innerHTML = lista.map(function(t){
+      const plataforma = t.plataforma || detectarPlataforma(t.link);
+      return '<tr class="clicavel" data-id="'+t.id+'">' +
+        '<td>'+escapeHtml(t.titulo)+'</td>' +
+        '<td><span class="pilula p-'+plataforma.toLowerCase()+'">'+escapeHtml(plataforma)+'</span></td>' +
+        '<td>'+(t.link ? '<a href="'+escapeHtml(t.link)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">'+ICONES.externo+'</a>' : '—')+'</td>' +
+        '<td>'+(t.criado_em ? formatarDataBr(t.criado_em.slice(0,10)) : '—')+'</td>' +
+        '<td><button class="btn-icone perigo" data-acao="apagar-transcricao" data-id="'+t.id+'" onclick="event.stopPropagation()">'+ICONES.lixo+'</button></td>' +
+      '</tr>';
+    }).join('');
+
+    corpo.querySelectorAll('tr.clicavel').forEach(function(tr){
+      tr.addEventListener('click', function(){ abrirFormTranscricao(state.transcricoes.find(function(x){ return x.id === tr.dataset.id; })); });
+    });
+    corpo.querySelectorAll('[data-acao="apagar-transcricao"]').forEach(function(b){
+      b.addEventListener('click', async function(){
+        if(!confirm('Apagar esta transcrição?')) return;
+        const r = await apagar('transcricoes', b.dataset.id);
+        if(!r.ok){ mostrarAviso('avisoTranscricoes', 'Não consegui apagar: ' + r.erro, 'erro'); return; }
+        state.transcricoes = state.transcricoes.filter(function(x){ return x.id !== b.dataset.id; });
+        renderTabelaTranscricoes();
+      });
+    });
+  }
+
+  function abrirFormTranscricao(item){
+    const editando = !!item;
+    const t = item || { titulo:'', link:'', roteiro:'', observacoes:'' };
+    abrirModal(editando ? 'Editar transcrição' : 'Nova transcrição',
+      '<form class="form-grade" id="formTranscricao">' +
+        '<div class="campo"><label>Título</label><input type="text" name="titulo" value="'+escapeHtml(t.titulo)+'" required placeholder="Como você quer lembrar desse vídeo"></div>' +
+        '<div class="campo"><label>Link (YouTube, Instagram ou TikTok)</label><input type="url" name="link" id="campoLinkTranscricao" value="'+escapeHtml(t.link)+'" placeholder="https://..."></div>' +
+        '<div id="previewTranscricao">'+htmlPreviewVideo(t.link)+'</div>' +
+        '<div class="campo"><label>Roteiro (transcrição)</label><textarea name="roteiro" style="min-height:160px;" placeholder="Cole aqui o texto gerado no tokscript.com ou digite a transcrição">'+escapeHtml(t.roteiro)+'</textarea></div>' +
+        '<div class="campo"><label>Observações</label><textarea name="observacoes" placeholder="O que você achou, o que dá pra copiar, ideias que isso te deu...">'+escapeHtml(t.observacoes)+'</textarea></div>' +
+        '<div class="form-acoes"><button type="submit" class="btn btn-primario">Salvar</button></div>' +
+      '</form>',
+      true
+    );
+
+    const campoLink = document.getElementById('campoLinkTranscricao');
+    campoLink.addEventListener('input', function(){
+      document.getElementById('previewTranscricao').innerHTML = htmlPreviewVideo(campoLink.value.trim());
+    });
+
+    document.getElementById('formTranscricao').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const link = fd.get('link').trim();
+      const linha = {
+        titulo: fd.get('titulo').trim(),
+        link: link,
+        plataforma: detectarPlataforma(link),
+        roteiro: fd.get('roteiro').trim(),
+        observacoes: fd.get('observacoes').trim()
+      };
+      const r = editando ? await atualizar('transcricoes', t.id, linha) : await inserir('transcricoes', linha);
+      if(!r.ok){ mostrarAviso('avisoTranscricoes', 'Não consegui salvar: ' + r.erro, 'erro'); return; }
+      fecharModal();
+      carregarTranscricoes();
+    });
+  }
+
+  /* =========================================================
      LIGAÇÕES DE TELA (busca, filtros, botões, modal)
   ========================================================= */
   function ligarEventosGerais(){
@@ -1838,6 +2021,9 @@
         renderTabelaCampanhas();
       });
     });
+
+    document.getElementById('buscaTranscricoes').addEventListener('input', function(e){ state.buscaTranscricoes = e.target.value; renderTabelaTranscricoes(); });
+    document.getElementById('btnNovaTranscricao').addEventListener('click', function(){ abrirFormTranscricao(null); });
   }
 
   /* =========================================================
@@ -1866,6 +2052,7 @@
     carregarCalendario();
     carregarCampanhas();
     carregarChecklist();
+    carregarTranscricoes();
   })();
 })();
 </script>
