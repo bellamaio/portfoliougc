@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Isabela Maio | Portfólio UGC Creator</title>
+<meta name="description" content="Isabela Maio, criadora de conteúdo UGC em Blumenau. Vídeos autênticos para marcas de beleza, skincare, moda, casa e tech.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ====== TOKENS ====== */
+  :root{
+    --bg:#f3f4f2;
+    --card:#ffffff;
+    --ink:#0a0a0a;
+    --ink-soft:#57584f;
+    --lime:#c6f24e;
+    --lime-deep:#9fd426;
+    --line:#e1e2dc;
+    --radius-lg:22px;
+    --radius-md:16px;
+    --radius-sm:10px;
+    --shadow-sm:0 8px 20px -12px rgba(10,10,10,.18);
+    --shadow-lg:0 30px 60px -28px rgba(10,10,10,.32);
+    --maxw:1180px;
+    --font:'Manrope', system-ui, sans-serif;
+  }
+
+  /* ====== RESET ====== */
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--font);
+    background:var(--bg);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  img,svg{display:block;max-width:100%;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;}
+  ul{list-style:none;margin:0;padding:0;}
+  h1,h2,h3,p{margin:0;}
+  input,textarea,button{font-family:inherit;font-size:1rem;}
+
+  :focus-visible{
+    outline:3px solid var(--lime-deep);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  .skip-link{
+    position:absolute;
+    left:12px;
+    top:-60px;
+    background:var(--ink);
+    color:#fff;
+    padding:10px 16px;
+    border-radius:8px;
+    z-index:1000;
+    transition:top .2s ease;
+  }
+  .skip-link:focus{top:12px;}
+
+  .section-inner{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  .section{padding:88px 0;}
+  .section-head{max-width:640px;margin:0 0 44px;}
+  .eyebrow{
+    display:inline-block;
+    font-weight:700;
+    font-size:.78rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    background:var(--card);
+    border:1px solid var(--line);
+    padding:6px 14px;
+    border-radius:999px;
+    margin-bottom:14px;
+  }
+  h2{font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:800;letter-spacing:-.01em;}
+  .section-sub{margin-top:12px;color:var(--ink-soft);font-size:1.02rem;max-width:52ch;}
+
+  .lime-mark{
+    background:linear-gradient(180deg, transparent 58%, var(--lime) 58%);
+    padding:0 4px;
+    display:inline-block;
+    transform:rotate(-1deg);
+  }
+
+  /* ====== REVEAL / ANIMAÇÕES ====== */
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease, transform .7s ease;}
+  .reveal.is-visible{opacity:1;transform:translateY(0);}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .reveal{opacity:1;transform:none;transition:none;}
+    *{animation-duration:.001ms !important;animation-iteration-count:1 !important;}
+  }
+
+  /* ====== MEDIA PLACEHOLDER ======
+     Estes blocos representam onde entram fotos/vídeos reais.
+     Para trocar por uma imagem real: troque a div.media-placeholder
+     por uma tag <img src="sua-foto.jpg" alt="descrição real">
+     mantendo a mesma classe de proporção (ratio-45, ratio-916, ratio-11)
+     para preservar o tamanho e o encaixe no layout. */
+  .media-placeholder{
+    position:relative;
+    border-radius:var(--radius-md);
+    background:linear-gradient(135deg,#dcdfd4 0%,#eef0e8 45%,#d7ddc9 100%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:14px;
+    color:var(--ink-soft);
+    font-weight:600;
+    font-size:.82rem;
+    overflow:hidden;
+  }
+  .media-placeholder span{max-width:80%;}
+  .ratio-45{aspect-ratio:4/5;}
+  .ratio-916{aspect-ratio:9/16;}
+  .ratio-11{aspect-ratio:1/1;}
+
+  /* ====== BOTÕES ====== */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 26px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:.95rem;
+    border:2px solid transparent;
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--lime);color:var(--ink);box-shadow:var(--shadow-sm);}
+  .btn-primary:hover{background:var(--lime-deep);}
+  .btn-outline{background:transparent;color:var(--ink);border-color:var(--ink);}
+  .btn-outline:hover{background:var(--ink);color:#fff;}
+  .btn-dark{background:var(--ink);color:#fff;}
+  .btn-dark:hover{background:#000;}
+
+  /* ====== NAV ====== */
+  .navbar{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:200;
+    background:rgba(243,244,242,.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:16px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .nav-logo{font-weight:800;font-size:1.15rem;letter-spacing:-.02em;}
+  .nav-links{display:flex;gap:28px;}
+  .nav-links a{font-weight:600;font-size:.94rem;color:var(--ink-soft);transition:color .15s ease;}
+  .nav-links a:hover{color:var(--ink);}
+  .nav-toggle{
+    display:none;
+    background:var(--ink);
+    color:#fff;
+    border:none;
+    width:44px;height:44px;
+    border-radius:12px;
+    font-size:1.2rem;
+    align-items:center;
+    justify-content:center;
+  }
+  .nav-mobile{
+    display:none;
+    flex-direction:column;
+    gap:4px;
+    padding:8px 24px 20px;
+    border-top:1px solid var(--line);
+  }
+  .nav-mobile a{
+    padding:12px 4px;
+    font-weight:700;
+    border-bottom:1px solid var(--line);
+  }
+  .nav-mobile.open{display:flex;}
+
+  @media (max-width:860px){
+    .nav-links{display:none;}
+    .nav-toggle{display:flex;}
+  }
+
+  /* ====== HERO ====== */
+  .hero{
+    padding:150px 0 60px;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:56px;
+    align-items:center;
+  }
+  .hero-title{
+    font-size:clamp(2.4rem,5.6vw,4rem);
+    font-weight:800;
+    letter-spacing:-.03em;
+    line-height:1.04;
+  }
+  .hero-text p.hero-desc{
+    margin-top:20px;
+    font-size:1.12rem;
+    color:var(--ink-soft);
+    max-width:46ch;
+  }
+  .hero-actions{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-top:32px;
+  }
+  .hero-stats{
+    display:flex;
+    gap:34px;
+    margin-top:48px;
+    flex-wrap:wrap;
+  }
+  .hero-stat b{
+    display:block;
+    font-size:2rem;
+    font-weight:800;
+    letter-spacing:-.02em;
+  }
+  .hero-stat span{
+    font-size:.85rem;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+
+  /* ---- visual flutuante ---- */
+  .hero-visual{
+    position:relative;
+    min-height:480px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .hero-photo-wrap{
+    position:relative;
+    width:min(320px, 78%);
+  }
+  .hero-photo{
+    width:100%;
+    box-shadow:var(--shadow-lg);
+  }
+  .selection-frame{
+    position:absolute;
+    inset:-10px;
+    border:2.5px dashed var(--lime-deep);
+    border-radius:calc(var(--radius-md) + 8px);
+    pointer-events:none;
+  }
+  .selection-frame::before,
+  .selection-frame::after{
+    content:"";
+    position:absolute;
+    width:10px;height:10px;
+    background:var(--lime);
+    border:2px solid var(--ink);
+    border-radius:3px;
+  }
+  .selection-frame::before{top:-6px;left:-6px;}
+  .selection-frame::after{bottom:-6px;right:-6px;}
+
+  .float-el{
+    position:absolute;
+    background:var(--card);
+    border-radius:var(--radius-sm);
+    box-shadow:var(--shadow-sm);
+    padding:10px 14px;
+    font-weight:700;
+    font-size:.85rem;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    z-index:3;
+  }
+  .float-toolbar{
+    top:6%;
+    left:-8%;
+    flex-direction:column;
+    padding:12px 10px;
+    gap:12px;
+  }
+  .float-toolbar .dot{
+    width:20px;height:20px;
+    border-radius:6px;
+    background:var(--bg);
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    font-size:.75rem;
+  }
+  .float-toolbar .dot.active{background:var(--lime);border-color:var(--lime-deep);}
+
+  .float-bubble{
+    top:0%;
+    right:-10%;
+  }
+  .float-chip{
+    bottom:10%;
+    left:-14%;
+    background:var(--ink);
+    color:#fff;
+  }
+  .float-cursor{
+    position:absolute;
+    bottom:20%;
+    right:6%;
+    z-index:4;
+    animation:cursorFloat 4.5s ease-in-out infinite;
+  }
+  @keyframes cursorFloat{
+    0%,100%{transform:translate(0,0);}
+    50%{transform:translate(14px,-18px);}
+  }
+
+  .hero-timeline{
+    margin-top:38px;
+    background:var(--card);
+    border-radius:14px;
+    box-shadow:var(--shadow-sm);
+    padding:14px 16px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-timeline .track{
+    display:flex;
+    gap:6px;
+    height:18px;
+  }
+  .hero-timeline .clip{
+    background:var(--lime);
+    border-radius:5px;
+    height:100%;
+  }
+  .hero-timeline .playhead{
+    position:absolute;
+    top:8px;
+    bottom:8px;
+    width:2px;
+    background:var(--ink);
+    left:6%;
+    animation:playhead 5s ease-in-out infinite alternate;
+  }
+  .hero-timeline .playhead::before{
+    content:"";
+    position:absolute;
+    top:-4px;left:-4px;
+    width:10px;height:10px;
+    border-radius:50%;
+    background:var(--ink);
+  }
+  @keyframes playhead{
+    0%{left:6%;}
+    100%{left:86%;}
+  }
+
+  @media (max-width:640px){
+    .hero-visual{min-height:380px;}
+    .float-toolbar{left:-2%;}
+    .float-bubble{right:-2%;}
+    .float-chip{left:-2%;}
+  }
+
+  /* ---- faixa de marcas ---- */
+  .brand-strip{
+    background:var(--card);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:20px 0;
+    overflow:hidden;
+  }
+  .brand-track{
+    display:flex;
+    gap:52px;
+    width:max-content;
+    animation:marquee 26s linear infinite;
+  }
+  .brand-track span{
+    font-weight:700;
+    color:var(--ink-soft);
+    font-size:.95rem;
+    letter-spacing:.03em;
+    white-space:nowrap;
+  }
+  @keyframes marquee{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .brand-track{animation:none;flex-wrap:wrap;width:auto;}
+  }
+
+  /* ====== SOBRE ====== */
+  .about-grid{
+    display:grid;
+    grid-template-columns:.8fr 1.2fr;
+    gap:56px;
+    align-items:center;
+  }
+  .about-photo{width:100%;}
+  .about-text p{color:var(--ink-soft);font-size:1.05rem;}
+  .about-text p + p{margin-top:14px;}
+  .promise-list{
+    margin-top:26px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .promise-list li{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    padding:14px 16px;
+    font-weight:600;
+    font-size:.95rem;
+  }
+  .promise-list .tick{
+    flex:none;
+    width:24px;height:24px;
+    border-radius:50%;
+    background:var(--lime);
+    display:flex;align-items:center;justify-content:center;
+    font-size:.8rem;
+    font-weight:800;
+  }
+  .signature{
+    margin-top:28px;
+    font-family:var(--font);
+    font-size:1.4rem;
+    font-weight:800;
+    font-style:italic;
+  }
+
+  /* ====== DESTAQUES ====== */
+  .highlights-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:26px;
+  }
+  .highlight-card{
+    background:var(--card);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-sm);
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .highlight-card:hover,
+  .highlight-card:focus-visible{
+    transform:translateY(-6px);
+    box-shadow:var(--shadow-lg);
+  }
+  .highlight-media{margin-bottom:16px;}
+  .play-btn{
+    position:absolute;
+    inset:0;
+    margin:auto;
+    width:56px;height:56px;
+    border-radius:50%;
+    background:var(--lime);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.1rem;
+    box-shadow:0 10px 24px -8px rgba(0,0,0,.4);
+  }
+  .highlight-number{
+    font-size:1.7rem;
+    font-weight:800;
+    letter-spacing:-.02em;
+  }
+  .highlight-number-label{
+    font-size:.8rem;
+    color:var(--ink-soft);
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+  .highlight-title{margin-top:12px;font-size:1.08rem;font-weight:800;}
+  .highlight-context{margin-top:6px;color:var(--ink-soft);font-size:.92rem;}
+
+  @media (max-width:900px){
+    .highlights-grid{grid-template-columns:1fr;}
+  }
+
+  /* ====== TRABALHOS ====== */
+  .filter-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:32px;
+  }
+  .filter-btn{
+    background:var(--card);
+    border:1px solid var(--line);
+    padding:10px 18px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:.88rem;
+    color:var(--ink-soft);
+    transition:all .15s ease;
+  }
+  .filter-btn:hover{border-color:var(--ink);color:var(--ink);}
+  .filter-btn.active{
+    background:var(--ink);
+    color:#fff;
+    border-color:var(--ink);
+  }
+  .works-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:22px;
+  }
+  .work-card{
+    background:var(--card);
+    border-radius:var(--radius-md);
+    box-shadow:var(--shadow-sm);
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    transition:transform .2s ease;
+  }
+  .work-card:hover{transform:translateY(-4px);}
+  .work-card .media-placeholder{border-radius:0;}
+  .work-body{padding:14px 16px 18px;}
+  .work-niche{
+    display:inline-block;
+    font-size:.7rem;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    background:var(--lime);
+    padding:4px 10px;
+    border-radius:999px;
+    margin-bottom:8px;
+  }
+  .work-title{font-weight:800;font-size:.98rem;}
+  .work-brand{color:var(--ink-soft);font-size:.85rem;margin-top:4px;}
+
+  @media (max-width:980px){
+    .works-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:560px){
+    .works-grid{grid-template-columns:1fr;}
+  }
+
+  /* ====== SERVIÇOS ====== */
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+  }
+  .service-card{
+    background:var(--card);
+    border-radius:var(--radius-lg);
+    padding:28px 24px;
+    box-shadow:var(--shadow-sm);
+  }
+  .service-number{
+    font-size:.85rem;
+    font-weight:800;
+    color:var(--ink-soft);
+    background:var(--bg);
+    border:1px solid var(--line);
+    width:38px;height:38px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:18px;
+  }
+  .service-title{font-size:1.12rem;font-weight:800;}
+  .service-desc{margin-top:8px;color:var(--ink-soft);font-size:.92rem;}
+
+  @media (max-width:900px){
+    .services-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:560px){
+    .services-grid{grid-template-columns:1fr;}
+  }
+
+  /* ====== NUMEROS E DEPOIMENTOS ====== */
+  .numbers-block{margin-bottom:64px;}
+  .metrics-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+  }
+  .metric-card{
+    background:var(--card);
+    border-radius:var(--radius-md);
+    padding:26px 20px;
+    text-align:center;
+    box-shadow:var(--shadow-sm);
+  }
+  .metric-number{
+    font-size:2.3rem;
+    font-weight:800;
+    letter-spacing:-.02em;
+  }
+  .metric-label{
+    margin-top:6px;
+    font-size:.85rem;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
+  .block-label{
+    font-weight:800;
+    font-size:1rem;
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .block-label::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+  .campaign-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+  }
+  .campaign-card{
+    background:var(--ink);
+    color:#fff;
+    border-radius:var(--radius-md);
+    padding:24px;
+  }
+  .campaign-brand{font-size:.82rem;font-weight:700;color:var(--lime);text-transform:uppercase;letter-spacing:.05em;}
+  .campaign-result{font-size:1.7rem;font-weight:800;margin-top:8px;}
+  .campaign-context{margin-top:10px;color:#d8dbcf;font-size:.88rem;}
+
+  .testimonials-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+  }
+  .testimonial-card{
+    background:var(--card);
+    border-radius:var(--radius-md);
+    padding:24px;
+    box-shadow:var(--shadow-sm);
+  }
+  .testimonial-quote{font-size:.98rem;color:var(--ink);}
+  .testimonial-quote::before{content:"\201C";}
+  .testimonial-quote::after{content:"\201D";}
+  .testimonial-author{
+    margin-top:14px;
+    font-weight:800;
+    font-size:.9rem;
+  }
+  .testimonial-company{color:var(--ink-soft);font-size:.82rem;font-weight:600;}
+
+  @media (max-width:900px){
+    .metrics-grid{grid-template-columns:repeat(2,1fr);}
+    .campaign-grid{grid-template-columns:1fr;}
+    .testimonials-grid{grid-template-columns:1fr;}
+  }
+
+  /* ====== CONTATO ====== */
+  .contact-grid{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:40px;
+    align-items:start;
+  }
+  .contact-form{
+    background:var(--card);
+    border-radius:var(--radius-lg);
+    padding:32px;
+    box-shadow:var(--shadow-sm);
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .field label{
+    display:block;
+    font-weight:700;
+    font-size:.85rem;
+    margin-bottom:6px;
+  }
+  .field input,
+  .field textarea{
+    width:100%;
+    padding:13px 14px;
+    border-radius:10px;
+    border:1.5px solid var(--line);
+    background:var(--bg);
+    resize:vertical;
+  }
+  .field input:focus,
+  .field textarea:focus{
+    border-color:var(--ink);
+    outline:none;
+  }
+  .contact-form .btn{align-self:flex-start;margin-top:6px;}
+  .form-success{
+    display:none;
+    background:var(--lime);
+    border-radius:var(--radius-md);
+    padding:28px;
+    font-weight:700;
+    text-align:center;
+  }
+  .form-success.show{display:block;}
+  .contact-form.hidden{display:none;}
+
+  .contact-side{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .contact-btn{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:18px 20px;
+    font-weight:700;
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .contact-btn:hover{transform:translateY(-3px);border-color:var(--ink);}
+  .contact-btn .ico{
+    width:38px;height:38px;
+    border-radius:50%;
+    background:var(--lime);
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.05rem;
+    flex:none;
+  }
+  .contact-btn small{display:block;color:var(--ink-soft);font-weight:600;font-size:.78rem;}
+
+  @media (max-width:900px){
+    .contact-grid{grid-template-columns:1fr;}
+  }
+
+  /* ====== RODAPÉ ====== */
+  footer{
+    background:var(--ink);
+    color:#fff;
+    padding:44px 0;
+  }
+  .footer-inner{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .footer-name{font-weight:800;font-size:1.1rem;}
+  .footer-links{display:flex;gap:18px;}
+  .footer-links a{color:#d8dbcf;font-weight:600;font-size:.9rem;}
+  .footer-links a:hover{color:var(--lime);}
+  .footer-year{color:#9a9c92;font-size:.85rem;}
+
+  /* ====== MODAL DE CAPTURA ====== */
+  .capture-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(10,10,10,.6);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:500;
+    padding:20px;
+  }
+  .capture-overlay.open{display:flex;}
+  .capture-modal{
+    background:var(--card);
+    border-radius:var(--radius-lg);
+    max-width:420px;
+    width:100%;
+    padding:32px;
+    position:relative;
+    box-shadow:var(--shadow-lg);
+  }
+  .capture-close{
+    position:absolute;
+    top:16px;right:16px;
+    width:34px;height:34px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--bg);
+    font-size:1rem;
+    font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .capture-modal h3{font-size:1.3rem;font-weight:800;padding-right:30px;}
+  .capture-modal p{margin-top:8px;color:var(--ink-soft);font-size:.92rem;}
+  .capture-form{margin-top:20px;display:flex;flex-direction:column;gap:12px;}
+  .capture-form .btn{margin-top:6px;width:100%;justify-content:center;}
+  .capture-success{display:none;margin-top:16px;font-weight:700;color:var(--ink);background:var(--lime);padding:14px;border-radius:10px;text-align:center;}
+  .capture-success.show{display:block;}
+
+  /* ====== UTILITÁRIOS ====== */
+  .visually-hidden{
+    position:absolute;
+    width:1px;height:1px;
+    overflow:hidden;
+    clip:rect(0 0 0 0);
+    white-space:nowrap;
+  }
+
+  @media (max-width:980px){
+    .hero-grid,
+    .about-grid{grid-template-columns:1fr;}
+    .hero-visual{order:-1;}
+  }
+</style>
+</head>
+<body>
+
+<a href="#inicio" class="skip-link">Pular para o conteúdo</a>
+
+<!-- ========== NAV ========== -->
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="#inicio" class="nav-logo">Isabela Maio</a>
+    <nav class="nav-links" aria-label="Navegação principal">
+      <a href="#sobre">Sobre</a>
+      <a href="#destaques">Destaques</a>
+      <a href="#trabalhos">Trabalhos</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#numeros">Números</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navMobile">☰</button>
+  </div>
+  <nav class="nav-mobile" id="navMobile" aria-label="Navegação mobile">
+    <a href="#sobre">Sobre</a>
+    <a href="#destaques">Destaques</a>
+    <a href="#trabalhos">Trabalhos</a>
+    <a href="#servicos">Serviços</a>
+    <a href="#numeros">Números</a>
+    <a href="#contato">Contato</a>
+  </nav>
+</header>
+
+<main id="inicio">
+
+  <!-- ========== 1. CAPA ========== -->
+  <section class="hero">
+    <div class="section-inner hero-grid">
+      <div class="hero-text">
+        <p class="eyebrow">UGC Creator</p>
+        <h1 class="hero-title">Isabela Maio</h1>
+        <p class="hero-desc">Eu crio <span class="lime-mark">vídeos autênticos</span> que fazem a sua marca parecer humana, aumentam a confiança e vendem mais em anúncios e redes sociais.</p>
+        <div class="hero-actions">
+          <a href="#contato" class="btn btn-primary">Falar comigo</a>
+          <a href="#trabalhos" class="btn btn-outline">Ver os trabalhos</a>
+        </div>
+        <div class="hero-stats" id="heroStats" aria-label="Números resumidos">
+          <!-- Preenchido via JavaScript a partir do array heroStats -->
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="false">
+        <div class="hero-photo-wrap">
+          <div class="hero-photo media-placeholder ratio-45" role="img" aria-label="Foto da creator, formato 4:5. Troque este bloco por uma imagem real.">
+            <span>foto da creator 4:5</span>
+          </div>
+          <div class="selection-frame"></div>
+
+          <div class="float-el float-toolbar" aria-hidden="true">
+            <span class="dot active">✂️</span>
+            <span class="dot">🎬</span>
+            <span class="dot">🎨</span>
+            <span class="dot">🔊</span>
+          </div>
+          <div class="float-el float-bubble" aria-hidden="true">✨ Efeitos</div>
+          <div class="float-el float-chip" aria-hidden="true">Oi ✌️</div>
+          <div class="float-cursor" aria-hidden="true">↖️</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-inner">
+      <div class="hero-timeline" aria-hidden="true">
+        <div class="track">
+          <div class="clip" style="width:18%"></div>
+          <div class="clip" style="width:10%"></div>
+          <div class="clip" style="width:24%"></div>
+          <div class="clip" style="width:14%"></div>
+          <div class="clip" style="width:20%"></div>
+        </div>
+        <div class="playhead"></div>
+      </div>
+    </div>
+
+    <div class="brand-strip">
+      <div class="brand-track" id="brandTrack">
+        <!-- Preenchido via JavaScript a partir do array brands -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 2. SOBRE MIM ========== -->
+  <section id="sobre" class="section">
+    <div class="section-inner about-grid reveal">
+      <div class="about-photo media-placeholder ratio-45" role="img" aria-label="Foto de Isabela Maio, formato 4:5. Troque este bloco por uma imagem real.">
+        <span>foto da creator 4:5</span>
+      </div>
+      <div class="about-text">
+        <p class="eyebrow">Sobre mim</p>
+        <h2>Prazer, eu sou a Isabela</h2>
+        <p>Eu moro em Blumenau e vivo criando conteúdo de verdade: aquele vídeo que parece feito por uma amiga, não por uma agência. Gosto de testar produto de verdade, contar o que gostei e o que mudaria, e entregar algo que a marca possa usar sem medo.</p>
+        <p>Trabalho com beleza, skincare, moda, casa e decoração e tech, sempre pensando no que faz a pessoa do outro lado parar de rolar o feed e prestar atenção.</p>
+        <ul class="promise-list">
+          <li><span class="tick">✓</span> Roteiro aprovado antes de gravar</li>
+          <li><span class="tick">✓</span> Uma rodada de ajuste inclusa</li>
+          <li><span class="tick">✓</span> Entrega em até 72 horas úteis</li>
+        </ul>
+        <p class="signature">Isabela Maio</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 3. CONTEÚDOS DE DESTAQUE ========== -->
+  <section id="destaques" class="section">
+    <div class="section-inner">
+      <div class="section-head reveal">
+        <p class="eyebrow">Destaques</p>
+        <h2>Conteúdos de <span class="lime-mark">destaque</span></h2>
+        <p class="section-sub">Alguns dos vídeos que mais performaram para as marcas que já atendi.</p>
+      </div>
+      <div class="highlights-grid" id="highlightsGrid">
+        <!-- Preenchido via JavaScript a partir do array highlights.
+             videoUrl = link do vídeo (troque "#" pela URL real do post/reels)
+             cover = legenda da capa vertical 9:16 (troque o bloco media-placeholder por um <img> real) -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 4. TRABALHOS POR NICHO ========== -->
+  <section id="trabalhos" class="section">
+    <div class="section-inner">
+      <div class="section-head reveal">
+        <p class="eyebrow">Portfólio</p>
+        <h2>Trabalhos por <span class="lime-mark">nicho</span></h2>
+        <p class="section-sub">Filtre por área para ver os trabalhos entregues em cada segmento.</p>
+      </div>
+      <div class="filter-row" id="filterRow" role="group" aria-label="Filtrar trabalhos por nicho">
+        <!-- Preenchido via JavaScript a partir dos nichos do array works -->
+      </div>
+      <div class="works-grid reveal" id="worksGrid">
+        <!-- Preenchido via JavaScript a partir do array works -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 5. COMO EU TE AJUDO ========== -->
+  <section id="servicos" class="section">
+    <div class="section-inner">
+      <div class="section-head reveal">
+        <p class="eyebrow">Serviços</p>
+        <h2>Como eu te <span class="lime-mark">ajudo</span></h2>
+        <p class="section-sub">Formatos prontos para usar em anúncio, loja ou rede social.</p>
+      </div>
+      <div class="services-grid" id="servicesGrid">
+        <!-- Preenchido via JavaScript a partir do array services -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 6. NÚMEROS E DEPOIMENTOS ========== -->
+  <section id="numeros" class="section">
+    <div class="section-inner">
+      <div class="section-head reveal">
+        <p class="eyebrow">Resultados</p>
+        <h2>Números e <span class="lime-mark">depoimentos</span></h2>
+        <p class="section-sub">O que os números mostram e o que as marcas dizem sobre o trabalho.</p>
+      </div>
+
+      <div class="numbers-block reveal">
+        <div class="metrics-grid" id="metricsGrid">
+          <!-- Preenchido via JavaScript a partir do array metrics, com contador animado -->
+        </div>
+      </div>
+
+      <div class="numbers-block reveal">
+        <p class="block-label">Resultados de campanha</p>
+        <div class="campaign-grid" id="campaignGrid">
+          <!-- Preenchido via JavaScript a partir do array campaignResults -->
+        </div>
+      </div>
+
+      <div class="reveal">
+        <p class="block-label">O que dizem sobre o meu trabalho</p>
+        <div class="testimonials-grid" id="testimonialsGrid">
+          <!-- Preenchido via JavaScript a partir do array testimonials -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 7. BORA CRIAR JUNTOS ========== -->
+  <section id="contato" class="section">
+    <div class="section-inner">
+      <div class="section-head reveal">
+        <p class="eyebrow">Contato</p>
+        <h2>Bora criar <span class="lime-mark">juntos</span></h2>
+        <p class="section-sub">Conta um pouco sobre a sua marca e eu te respondo rapidinho.</p>
+      </div>
+
+      <div class="contact-grid reveal">
+        <div>
+          <form class="contact-form" id="contactForm" novalidate>
+            <div class="field">
+              <label for="ctName">Nome</label>
+              <input type="text" id="ctName" name="nome" required autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="ctEmail">E-mail</label>
+              <input type="email" id="ctEmail" name="email" required autocomplete="email">
+            </div>
+            <div class="field">
+              <label for="ctMessage">Mensagem</label>
+              <textarea id="ctMessage" name="mensagem" rows="5" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar mensagem</button>
+          </form>
+          <div class="form-success" id="formSuccess" role="status" aria-live="polite">
+            Mensagem enviada! Obrigada pelo contato, eu respondo em breve. 🎬
+          </div>
+        </div>
+
+        <div class="contact-side">
+          <a class="contact-btn" id="whatsappBtn" href="#" target="_blank" rel="noopener">
+            <span class="ico">💬</span>
+            <span>WhatsApp<small>(00) 00000-0000</small></span>
+          </a>
+          <a class="contact-btn" id="emailBtn" href="#">
+            <span class="ico">✉️</span>
+            <span>E-mail<small>seuemail@email.com</small></span>
+          </a>
+          <a class="contact-btn" id="instagramBtn" href="#" target="_blank" rel="noopener">
+            <span class="ico">📷</span>
+            <span>Instagram<small>@seuusuario</small></span>
+          </a>
+          <div class="contact-btn" style="cursor:default;">
+            <span class="ico">📍</span>
+            <span>Localização<small>Sua Cidade</small></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ========== 8. RODAPÉ ========== -->
+<footer>
+  <div class="footer-inner">
+    <p class="footer-name" id="footerName">SEU NOME</p>
+    <div class="footer-links" id="footerLinks">
+      <!-- Preenchido via JavaScript com os links de contato -->
+    </div>
+    <p class="footer-year">© <span id="footerYear"></span> Todos os direitos reservados.</p>
+  </div>
+</footer>
+
+<!-- ========== CARD DE CAPTURA ========== -->
+<div class="capture-overlay" id="captureOverlay" role="dialog" aria-modal="true" aria-labelledby="captureTitle">
+  <div class="capture-modal">
+    <button class="capture-close" id="captureClose" aria-label="Fechar">✕</button>
+    <h3 id="captureTitle">Quer meu mídia kit completo?</h3>
+    <p>Deixe seu nome e e-mail que eu envio com os meus números completos e formatos de trabalho.</p>
+    <form class="capture-form" id="captureForm">
+      <div class="field">
+        <label for="capName">Nome</label>
+        <input type="text" id="capName" name="nome" required autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="capEmail">E-mail</label>
+        <input type="email" id="capEmail" name="email" required autocomplete="email">
+      </div>
+      <button type="submit" class="btn btn-primary">Quero receber</button>
+    </form>
+    <div class="capture-success" id="captureSuccess" role="status" aria-live="polite">
+      Prontinho! Assim que possível eu envio o mídia kit para o seu e-mail. 💌
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* =========================================================
+     DADOS EDITÁVEIS
+     Troque os valores destes arrays para atualizar o site
+     sem precisar mexer no HTML.
+  ========================================================= */
+
+  // Dados de contato usados em vários pontos do site
+  const contact = {
+    name: "Isabela Maio",
+    whatsapp: "11947883499",     // apenas números, DDD incluso
+    whatsappDisplay: "(11) 94788-3499",
+    email: "isabelamaiocreator@gmail.com",
+    instagram: "@bellamaio",
+    city: "Blumenau"
+  };
+
+  // Marcas que já atenderam (faixa da capa). Troque pelos nomes reais.
+  const brands = [
+    "Marca 01","Marca 02","Marca 03","Marca 04","Marca 05","Marca 06",
+    "Marca 07","Marca 08","Marca 09","Marca 10","Marca 11","Marca 12"
+  ];
+
+  // Números curtos da capa
+  const heroStats = [
+    { value:100, suffix:"+", label:"vídeos entregues" },
+    { value:10,  suffix:"+", label:"marcas atendidas" },
+    { value:10,  suffix:"M+", label:"views somadas" }
+  ];
+
+  // Conteúdos de destaque (3 vídeos). videoUrl é o link do vídeo, cover é a legenda da capa 9:16.
+  const highlights = [
+    {
+      title:"Rotina de skincare noturna",
+      context:"Vídeo mostrando o passo a passo real do produto sendo usado.",
+      videoUrl:"#", // troque pelo link real do vídeo (reels, tiktok, etc.)
+      cover:"capa 9:16 do vídeo 01", // troque o bloco media-placeholder por um <img>/<video> real
+      numberValue:"+000",
+      numberLabel:"visualizações no reels"
+    },
+    {
+      title:"Unboxing de lançamento",
+      context:"Primeira impressão sincera logo na abertura da caixa.",
+      videoUrl:"#",
+      cover:"capa 9:16 do vídeo 02",
+      numberValue:"+000",
+      numberLabel:"visualizações no reels"
+    },
+    {
+      title:"Look do dia com a peça da marca",
+      context:"Vídeo de estilo mostrando a peça em uso no dia a dia.",
+      videoUrl:"#",
+      cover:"capa 9:16 do vídeo 03",
+      numberValue:"+000",
+      numberLabel:"visualizações no reels"
+    }
+  ];
+
+  // Trabalhos por nicho. niche deve ser um dos valores de nicheLabels abaixo.
+  const nicheLabels = {
+    beleza:"Beleza",
+    skincare:"Skincare",
+    moda:"Moda",
+    casa:"Casa e Decoração",
+    tech:"Tech"
+  };
+
+  const works = [
+    { title:"Trabalho 01", niche:"beleza",  brand:"Marca 01", format:"capa do trabalho 4:5", link:"#" },
+    { title:"Trabalho 02", niche:"beleza",  brand:"Marca 02", format:"capa do trabalho 4:5", link:"#" },
+    { title:"Trabalho 03", niche:"skincare",brand:"Marca 03", format:"capa do trabalho 4:5", link:"#" },
+    { title:"Trabalho 04", niche:"skincare",brand:"Marca 04", format:"capa do trabalho 4:5", link:"#" },
+    { title:"Trabalho 05", niche:"moda",    brand:"Marca 05", format:"capa do trabalho 4:5", link:"#" },
+    { title:"Trabalho 06", niche:"moda",    brand:"Marca 06", format:"capa do trabalho 4:5", link:"#" },
+    { title:"Trabalho 07", niche:"casa",    brand:"Marca 07", format:"capa do trabalho 4:5", link:"#" },
+    { title:"Trabalho 08", niche:"casa",    brand:"Marca 08", format:"capa do trabalho 4:5", link:"#" },
+    { title:"Trabalho 09", niche:"tech",    brand:"Marca 09", format:"capa do trabalho 4:5", link:"#" },
+    { title:"Trabalho 10", niche:"tech",    brand:"Marca 10", format:"capa do trabalho 4:5", link:"#" }
+  ];
+
+  // Seis serviços oferecidos
+  const services = [
+    { title:"Vídeo UGC", desc:"Vídeo autêntico, roteirizado e gravado por mim, pronto para usar como anúncio ou publicação." },
+    { title:"Corte para anúncio", desc:"Edição objetiva do material bruto, cortado no formato e tempo ideais para rodar como anúncio pago." },
+    { title:"Fotos do produto", desc:"Ensaio de fotos com o seu produto, pensado para loja, site ou rede social." },
+    { title:"Unboxing", desc:"Vídeo mostrando a abertura e a primeira impressão do produto, do jeito que a audiência gosta de ver." },
+    { title:"Publicação no meu perfil", desc:"O conteúdo é gravado e publicado direto no meu perfil, alcançando a minha própria audiência." },
+    { title:"Pacote mensal", desc:"Um combo fechado de conteúdos entregues todo mês, para manter a marca sempre presente." }
+  ];
+
+  // Métricas com contador animado. value numérico anima; placeholder:true mostra texto fixo.
+  const metrics = [
+    { value:100, suffix:"+",  label:"vídeos entregues" },
+    { value:10,  suffix:"+",  label:"marcas atendidas" },
+    { value:10,  suffix:"M+", label:"views somadas" },
+    { placeholder:true, display:"000", label:"Nova métrica (edite aqui)" }
+  ];
+
+  // Resultados de campanha (3)
+  const campaignResults = [
+    { brand:"Marca 01", result:"+000% de alcance", context:"Descreva aqui o resultado real desta campanha." },
+    { brand:"Marca 02", result:"+000 vendas", context:"Descreva aqui o resultado real desta campanha." },
+    { brand:"Marca 03", result:"+000% de engajamento", context:"Descreva aqui o resultado real desta campanha." }
+  ];
+
+  // Depoimentos (4)
+  const testimonials = [
+    { name:"Cliente 01", company:"Empresa 01", quote:"Escreva aqui o depoimento real do cliente sobre o trabalho entregue." },
+    { name:"Cliente 02", company:"Empresa 02", quote:"Escreva aqui o depoimento real do cliente sobre o trabalho entregue." },
+    { name:"Cliente 03", company:"Empresa 03", quote:"Escreva aqui o depoimento real do cliente sobre o trabalho entregue." },
+    { name:"Cliente 04", company:"Empresa 04", quote:"Escreva aqui o depoimento real do cliente sobre o trabalho entregue." }
+  ];
+
+  /* =========================================================
+     PREFERÊNCIA DE MOVIMENTO
+  ========================================================= */
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* =========================================================
+     RENDERIZAÇÃO
+  ========================================================= */
+  function el(tag, className, html){
+    const node = document.createElement(tag);
+    if(className) node.className = className;
+    if(html !== undefined) node.innerHTML = html;
+    return node;
+  }
+
+  // Faixa de marcas (duplicada para o efeito de marquee contínuo)
+  function renderBrands(){
+    const track = document.getElementById("brandTrack");
+    const list = brands.concat(brands);
+    track.innerHTML = list.map(function(b){ return "<span>" + b + "</span>"; }).join("");
+  }
+
+  // Números da capa
+  function renderHeroStats(){
+    const wrap = document.getElementById("heroStats");
+    wrap.innerHTML = "";
+    heroStats.forEach(function(stat){
+      const item = el("div", "hero-stat");
+      const b = el("b");
+      b.dataset.target = stat.value;
+      b.dataset.suffix = stat.suffix;
+      b.textContent = prefersReducedMotion ? (stat.value + stat.suffix) : ("0" + stat.suffix);
+      const span = el("span", null, stat.label);
+      item.appendChild(b);
+      item.appendChild(span);
+      wrap.appendChild(item);
+    });
+  }
+
+  // Conteúdos de destaque
+  function renderHighlights(){
+    const grid = document.getElementById("highlightsGrid");
+    grid.innerHTML = "";
+    highlights.forEach(function(h){
+      const card = el("a", "highlight-card reveal");
+      card.href = h.videoUrl;
+      card.target = "_blank";
+      card.rel = "noopener";
+      card.setAttribute("aria-label", h.title + ", abrir vídeo");
+      card.innerHTML =
+        '<div class="highlight-media" style="position:relative;">' +
+          '<div class="media-placeholder ratio-916" role="img" aria-label="' + h.cover + '. Troque por uma imagem ou vídeo real.">' +
+            '<span>' + h.cover + '</span>' +
+          '</div>' +
+          '<div class="play-btn" aria-hidden="true">▶</div>' +
+        '</div>' +
+        '<div class="highlight-number">' + h.numberValue + '</div>' +
+        '<div class="highlight-number-label">' + h.numberLabel + '</div>' +
+        '<div class="highlight-title">' + h.title + '</div>' +
+        '<p class="highlight-context">' + h.context + '</p>';
+      grid.appendChild(card);
+    });
+  }
+
+  // Filtros de nicho + galeria de trabalhos
+  let activeNiche = "todos";
+
+  function renderFilters(){
+    const row = document.getElementById("filterRow");
+    const niches = ["todos"].concat(Object.keys(nicheLabels));
+    row.innerHTML = "";
+    niches.forEach(function(n){
+      const btn = el("button", "filter-btn" + (n === activeNiche ? " active" : ""), n === "todos" ? "Todos" : nicheLabels[n]);
+      btn.type = "button";
+      btn.setAttribute("aria-pressed", n === activeNiche ? "true" : "false");
+      btn.addEventListener("click", function(){
+        activeNiche = n;
+        renderFilters();
+        renderWorks();
+      });
+      row.appendChild(btn);
+    });
+  }
+
+  function renderWorks(){
+    const grid = document.getElementById("worksGrid");
+    grid.innerHTML = "";
+    const filtered = works.filter(function(w){
+      return activeNiche === "todos" || w.niche === activeNiche;
+    });
+    filtered.forEach(function(w){
+      const card = el("a", "work-card");
+      card.href = w.link;
+      card.setAttribute("aria-label", w.title + ", " + w.brand);
+      card.innerHTML =
+        '<div class="media-placeholder ratio-45" role="img" aria-label="' + w.format + '. Troque por uma imagem real.">' +
+          '<span>' + w.format + '</span>' +
+        '</div>' +
+        '<div class="work-body">' +
+          '<span class="work-niche">' + nicheLabels[w.niche] + '</span>' +
+          '<div class="work-title">' + w.title + '</div>' +
+          '<div class="work-brand">' + w.brand + '</div>' +
+        '</div>';
+      grid.appendChild(card);
+    });
+  }
+
+  // Serviços
+  function renderServices(){
+    const grid = document.getElementById("servicesGrid");
+    grid.innerHTML = "";
+    services.forEach(function(s, i){
+      const num = String(i + 1).padStart(2, "0");
+      const card = el("div", "service-card");
+      card.innerHTML =
+        '<div class="service-number">' + num + '</div>' +
+        '<div class="service-title">' + s.title + '</div>' +
+        '<p class="service-desc">' + s.desc + '</p>';
+      grid.appendChild(card);
+    });
+  }
+
+  // Métricas com contador
+  function renderMetrics(){
+    const grid = document.getElementById("metricsGrid");
+    grid.innerHTML = "";
+    metrics.forEach(function(m){
+      const card = el("div", "metric-card");
+      if(m.placeholder){
+        card.innerHTML =
+          '<div class="metric-number">' + m.display + '</div>' +
+          '<div class="metric-label">' + m.label + '</div>';
+      } else {
+        const displayInitial = prefersReducedMotion ? (m.value + m.suffix) : ("0" + m.suffix);
+        card.innerHTML =
+          '<div class="metric-number" data-target="' + m.value + '" data-suffix="' + m.suffix + '">' + displayInitial + '</div>' +
+          '<div class="metric-label">' + m.label + '</div>';
+      }
+      grid.appendChild(card);
+    });
+  }
+
+  // Resultados de campanha
+  function renderCampaigns(){
+    const grid = document.getElementById("campaignGrid");
+    grid.innerHTML = "";
+    campaignResults.forEach(function(c){
+      const card = el("div", "campaign-card");
+      card.innerHTML =
+        '<div class="campaign-brand">' + c.brand + '</div>' +
+        '<div class="campaign-result">' + c.result + '</div>' +
+        '<p class="campaign-context">' + c.context + '</p>';
+      grid.appendChild(card);
+    });
+  }
+
+  // Depoimentos
+  function renderTestimonials(){
+    const grid = document.getElementById("testimonialsGrid");
+    grid.innerHTML = "";
+    testimonials.forEach(function(t){
+      const card = el("div", "testimonial-card");
+      card.innerHTML =
+        '<p class="testimonial-quote">' + t.quote + '</p>' +
+        '<div class="testimonial-author">' + t.name + '</div>' +
+        '<div class="testimonial-company">' + t.company + '</div>';
+      grid.appendChild(card);
+    });
+  }
+
+  // Botões e dados de contato (WhatsApp, e-mail, Instagram) + rodapé
+  function renderContact(){
+    const waDigits = contact.whatsapp.replace(/\D/g, "");
+    const waLink = "https://wa.me/55" + waDigits;
+    const igLink = "https://instagram.com/" + contact.instagram.replace("@", "");
+
+    const whatsappBtn = document.getElementById("whatsappBtn");
+    whatsappBtn.href = waLink;
+    whatsappBtn.querySelector("small").textContent = contact.whatsappDisplay;
+
+    const emailBtn = document.getElementById("emailBtn");
+    emailBtn.href = "mailto:" + contact.email;
+    emailBtn.querySelector("small").textContent = contact.email;
+
+    const instagramBtn = document.getElementById("instagramBtn");
+    instagramBtn.href = igLink;
+    instagramBtn.querySelector("small").textContent = contact.instagram;
+
+    document.querySelector(".contact-side .contact-btn:last-child small").textContent = contact.city;
+
+    document.getElementById("footerName").textContent = contact.name;
+
+    const footerLinks = document.getElementById("footerLinks");
+    footerLinks.innerHTML =
+      '<a href="' + waLink + '" target="_blank" rel="noopener">WhatsApp</a>' +
+      '<a href="mailto:' + contact.email + '">E-mail</a>' +
+      '<a href="' + igLink + '" target="_blank" rel="noopener">Instagram</a>';
+
+    document.getElementById("footerYear").textContent = new Date().getFullYear();
+  }
+
+  /* =========================================================
+     CONTADOR ANIMADO
+  ========================================================= */
+  function animateCounter(node){
+    const target = parseFloat(node.dataset.target);
+    const suffix = node.dataset.suffix || "";
+    if(prefersReducedMotion || isNaN(target)){
+      node.textContent = target + suffix;
+      return;
+    }
+    const duration = 1400;
+    const start = performance.now();
+    function tick(now){
+      const progress = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(target * eased);
+      node.textContent = current + suffix;
+      if(progress < 1){
+        requestAnimationFrame(tick);
+      } else {
+        node.textContent = target + suffix;
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function setupCounters(){
+    const nodes = document.querySelectorAll("[data-target]");
+    if(!("IntersectionObserver" in window) || prefersReducedMotion){
+      nodes.forEach(function(n){ n.textContent = n.dataset.target + (n.dataset.suffix || ""); });
+      return;
+    }
+    const observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          animateCounter(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.5 });
+    nodes.forEach(function(n){ observer.observe(n); });
+  }
+
+  /* =========================================================
+     ANIMAÇÃO DE ENTRADA AO ROLAR
+  ========================================================= */
+  function setupReveal(){
+    const items = document.querySelectorAll(".reveal");
+    if(!("IntersectionObserver" in window) || prefersReducedMotion){
+      items.forEach(function(n){ n.classList.add("is-visible"); });
+      return;
+    }
+    const observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.12 });
+    items.forEach(function(n){ observer.observe(n); });
+  }
+
+  /* =========================================================
+     NAVEGAÇÃO (MENU SANDUÍCHE + ROLAGEM SUAVE)
+  ========================================================= */
+  function setupNav(){
+    const toggle = document.getElementById("navToggle");
+    const mobile = document.getElementById("navMobile");
+
+    toggle.addEventListener("click", function(){
+      const isOpen = mobile.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      toggle.textContent = isOpen ? "✕" : "☰";
+    });
+
+    mobile.querySelectorAll("a").forEach(function(link){
+      link.addEventListener("click", function(){
+        mobile.classList.remove("open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.textContent = "☰";
+      });
+    });
+  }
+
+  /* =========================================================
+     FORMULÁRIO DE CONTATO
+  ========================================================= */
+  function setupContactForm(){
+    const form = document.getElementById("contactForm");
+    const success = document.getElementById("formSuccess");
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      if(!form.checkValidity()){
+        form.reportValidity();
+        return;
+      }
+      form.classList.add("hidden");
+      success.classList.add("show");
+      form.reset();
+    });
+  }
+
+  /* =========================================================
+     CARD DE CAPTURA (MÍDIA KIT)
+  ========================================================= */
+  function setupCaptureModal(){
+    const overlay = document.getElementById("captureOverlay");
+    const closeBtn = document.getElementById("captureClose");
+    const form = document.getElementById("captureForm");
+    const success = document.getElementById("captureSuccess");
+    const STORAGE_KEY = "ugcMidiaKitModalShown";
+
+    let lastFocused = null;
+
+    function openModal(){
+      if(sessionStorage.getItem(STORAGE_KEY)) return;
+      lastFocused = document.activeElement;
+      overlay.classList.add("open");
+      sessionStorage.setItem(STORAGE_KEY, "1");
+      const firstInput = document.getElementById("capName");
+      if(firstInput) firstInput.focus();
+    }
+
+    function closeModal(){
+      overlay.classList.remove("open");
+      if(lastFocused && typeof lastFocused.focus === "function"){
+        lastFocused.focus();
+      }
+    }
+
+    closeBtn.addEventListener("click", closeModal);
+    overlay.addEventListener("click", function(e){
+      if(e.target === overlay) closeModal();
+    });
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape" && overlay.classList.contains("open")) closeModal();
+    });
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      if(!form.checkValidity()){
+        form.reportValidity();
+        return;
+      }
+      form.style.display = "none";
+      success.classList.add("show");
+      setTimeout(closeModal, 2200);
+    });
+
+    try{
+      if(!sessionStorage.getItem(STORAGE_KEY)){
+        setTimeout(openModal, 7000);
+      }
+    }catch(err){
+      // sessionStorage indisponível (ex.: navegação privada); ignora o card de captura
+    }
+  }
+
+  /* =========================================================
+     INICIALIZAÇÃO
+  ========================================================= */
+  document.addEventListener("DOMContentLoaded", function(){
+    renderBrands();
+    renderHeroStats();
+    renderHighlights();
+    renderFilters();
+    renderWorks();
+    renderServices();
+    renderMetrics();
+    renderCampaigns();
+    renderTestimonials();
+    renderContact();
+
+    setupNav();
+    setupContactForm();
+    setupCaptureModal();
+
+    setupReveal();
+    setupCounters();
+  });
+})();
+</script>
+
+</body>
+</html>
