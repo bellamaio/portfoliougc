@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Entrar | Isabela Maio</title>
+<meta name="description" content="Acesso ao painel de administração do portfólio.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --card:#ffffff;
+    --ink:#361F17;
+    --ink-soft:#6b4a3d;
+    --accent:#C4DBE0;
+    --accent-deep:#A9CBD3;
+    --beige:#E7E4DB;
+    --line:#E7E4DB;
+    --radius-lg:22px;
+    --radius-md:16px;
+    --radius-sm:10px;
+    --shadow-sm:0 8px 20px -12px rgba(10,10,10,.18);
+    --shadow-lg:0 30px 60px -28px rgba(10,10,10,.32);
+    --font:'Manrope', system-ui, sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    font-family:var(--font);
+    background:var(--beige);
+    color:var(--ink);
+  }
+  a{color:inherit;}
+  :focus-visible{outline:3px solid var(--accent-deep);outline-offset:2px;border-radius:4px;}
+
+  .card{
+    width:100%;
+    max-width:380px;
+    background:var(--card);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-lg);
+    padding:36px 32px;
+  }
+  .logo{font-weight:800;font-size:1.15rem;margin-bottom:4px;}
+  .subtitulo{color:var(--ink-soft);font-size:.9rem;margin-bottom:28px;}
+  form{display:flex;flex-direction:column;gap:16px;}
+  .campo label{display:block;font-weight:700;font-size:.85rem;margin-bottom:6px;}
+  .campo input{
+    width:100%;
+    padding:13px 14px;
+    border-radius:10px;
+    border:1.5px solid var(--line);
+    background:var(--bg);
+    font-family:inherit;
+    font-size:1rem;
+    color:var(--ink);
+  }
+  .campo input:focus{border-color:var(--ink);outline:none;}
+  button{
+    font-family:inherit;
+    cursor:pointer;
+  }
+  .btn-entrar{
+    margin-top:4px;
+    padding:14px;
+    border:none;
+    border-radius:999px;
+    background:var(--accent);
+    color:var(--ink);
+    font-weight:700;
+    font-size:.95rem;
+    transition:background .15s ease, opacity .15s ease;
+  }
+  .btn-entrar:hover{background:var(--accent-deep);}
+  .btn-entrar:disabled{opacity:.6;cursor:default;}
+
+  .link-esqueci{
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    font-size:.82rem;
+    text-align:center;
+    margin-top:2px;
+    text-decoration:underline;
+  }
+
+  .faixa{
+    display:none;
+    margin-top:16px;
+    padding:12px 14px;
+    border-radius:10px;
+    font-size:.85rem;
+    font-weight:600;
+  }
+  .faixa.mostrar{display:block;}
+  .faixa.erro{background:#f6d9d0;color:#7a2e14;}
+  .faixa.ok{background:var(--accent);color:var(--ink);}
+</style>
+</head>
+<body>
+  <main class="card">
+    <p class="logo">Isabela Maio</p>
+    <p class="subtitulo">Entrar no painel</p>
+
+    <form id="formLogin">
+      <div class="campo">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" autocomplete="username" required>
+      </div>
+      <div class="campo">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn-entrar" id="btnEntrar">Entrar</button>
+      <button type="button" class="link-esqueci" id="btnEsqueci">Esqueci minha senha</button>
+    </form>
+
+    <div class="faixa erro" id="faixaErro" role="alert"></div>
+    <div class="faixa ok" id="faixaOk" role="status"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/banco.js"></script>
+  <script>
+  (function(){
+    "use strict";
+
+    const form = document.getElementById("formLogin");
+    const btnEntrar = document.getElementById("btnEntrar");
+    const btnEsqueci = document.getElementById("btnEsqueci");
+    const faixaErro = document.getElementById("faixaErro");
+    const faixaOk = document.getElementById("faixaOk");
+
+    function mostrarErro(msg){
+      faixaOk.classList.remove("mostrar");
+      faixaErro.textContent = msg;
+      faixaErro.classList.add("mostrar");
+    }
+    function mostrarOk(msg){
+      faixaErro.classList.remove("mostrar");
+      faixaOk.textContent = msg;
+      faixaOk.classList.add("mostrar");
+    }
+
+    // Se já tiver sessão aberta, manda direto pro admin.
+    async function conferirSessaoInicial(){
+      const { data } = await window.supabaseClient.auth.getSession();
+      if(data && data.session){
+        window.location.href = "../admin/";
+      }
+    }
+    conferirSessaoInicial();
+
+    form.addEventListener("submit", async function(e){
+      e.preventDefault();
+      btnEntrar.disabled = true;
+      btnEntrar.textContent = "Entrando...";
+      faixaErro.classList.remove("mostrar");
+      faixaOk.classList.remove("mostrar");
+
+      const email = document.getElementById("email").value.trim();
+      const senha = document.getElementById("senha").value;
+
+      const { error } = await window.supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: senha
+      });
+
+      if(error){
+        mostrarErro("E-mail ou senha incorretos.");
+        btnEntrar.disabled = false;
+        btnEntrar.textContent = "Entrar";
+        return;
+      }
+
+      window.location.href = "../admin/";
+    });
+
+    btnEsqueci.addEventListener("click", async function(){
+      const email = document.getElementById("email").value.trim();
+      if(!email){
+        mostrarErro("Digite seu e-mail no campo acima primeiro.");
+        return;
+      }
+      const { error } = await window.supabaseClient.auth.resetPasswordForEmail(email);
+      if(error){
+        mostrarErro("Não consegui enviar o e-mail de recuperação. Tente de novo.");
+        return;
+      }
+      mostrarOk("Te mandei um e-mail com o link pra trocar a senha.");
+    });
+  })();
+  </script>
+</body>
+</html>

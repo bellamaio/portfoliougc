@@ -737,6 +737,18 @@
     font-weight:700;
     text-align:center;
   }
+  .form-error{
+    display:none;
+    margin-top:14px;
+    padding:14px 16px;
+    border-radius:var(--radius-sm);
+    background:#f6ddd4;
+    color:#a8442a;
+    font-weight:700;
+    font-size:.85rem;
+    text-align:center;
+  }
+  .form-error.show{display:block;}
   .form-success.show{display:block;}
   .contact-form.hidden{display:none;}
 
@@ -1059,6 +1071,7 @@
           <div class="form-success" id="formSuccess" role="status" aria-live="polite">
             Mensagem enviada! Obrigada pelo contato, eu respondo em breve. 🎬
           </div>
+          <div class="form-error" id="formError" role="alert"></div>
         </div>
 
         <div class="contact-side">
@@ -1119,6 +1132,8 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/banco.js"></script>
 <script>
 (function(){
   "use strict";
@@ -1152,33 +1167,11 @@
     { value:10,  suffix:"M+", label:"views somadas" }
   ];
 
-  // Conteúdos de destaque (3 vídeos). videoUrl é o link do vídeo, cover é a legenda da capa 9:16.
-  const highlights = [
-    {
-      title:"Rotina de skincare noturna",
-      context:"Vídeo mostrando o passo a passo real do produto sendo usado.",
-      videoUrl:"#", // troque pelo link real do vídeo (reels, tiktok, etc.)
-      cover:"capa 9:16 do vídeo 01", // troque o bloco media-placeholder por um <img>/<video> real
-      numberValue:"+000",
-      numberLabel:"visualizações no reels"
-    },
-    {
-      title:"Unboxing de lançamento",
-      context:"Primeira impressão sincera logo na abertura da caixa.",
-      videoUrl:"#",
-      cover:"capa 9:16 do vídeo 02",
-      numberValue:"+000",
-      numberLabel:"visualizações no reels"
-    },
-    {
-      title:"Look do dia com a peça da marca",
-      context:"Vídeo de estilo mostrando a peça em uso no dia a dia.",
-      videoUrl:"#",
-      cover:"capa 9:16 do vídeo 03",
-      numberValue:"+000",
-      numberLabel:"visualizações no reels"
-    }
-  ];
+  // Conteúdos de destaque e trabalhos por nicho agora vêm do banco de dados
+  // (tabela "videos", editada no painel admin). Começam vazios e são
+  // preenchidos pela função carregarVideosDoBanco().
+  let highlights = [];
+  let works = [];
 
   // Trabalhos por nicho. niche deve ser um dos valores de nicheLabels abaixo.
   const nicheLabels = {
@@ -1188,19 +1181,6 @@
     casa:"Casa e Decoração",
     tech:"Tech"
   };
-
-  const works = [
-    { title:"Trabalho 01", niche:"beleza",  brand:"Marca 01", format:"capa do trabalho 4:5", link:"#" },
-    { title:"Trabalho 02", niche:"beleza",  brand:"Marca 02", format:"capa do trabalho 4:5", link:"#" },
-    { title:"Trabalho 03", niche:"skincare",brand:"Marca 03", format:"capa do trabalho 4:5", link:"#" },
-    { title:"Trabalho 04", niche:"skincare",brand:"Marca 04", format:"capa do trabalho 4:5", link:"#" },
-    { title:"Trabalho 05", niche:"moda",    brand:"Marca 05", format:"capa do trabalho 4:5", link:"#" },
-    { title:"Trabalho 06", niche:"moda",    brand:"Marca 06", format:"capa do trabalho 4:5", link:"#" },
-    { title:"Trabalho 07", niche:"casa",    brand:"Marca 07", format:"capa do trabalho 4:5", link:"#" },
-    { title:"Trabalho 08", niche:"casa",    brand:"Marca 08", format:"capa do trabalho 4:5", link:"#" },
-    { title:"Trabalho 09", niche:"tech",    brand:"Marca 09", format:"capa do trabalho 4:5", link:"#" },
-    { title:"Trabalho 10", niche:"tech",    brand:"Marca 10", format:"capa do trabalho 4:5", link:"#" }
-  ];
 
   // Seis serviços oferecidos
   const services = [
@@ -1274,10 +1254,60 @@
     });
   }
 
+  // Busca os vídeos visíveis no banco de dados (Supabase) e monta os
+  // arrays "highlights" (os que têm campo "destaque" preenchido) e
+  // "works" (todos, pra galeria por nicho). Se o banco não responder
+  // por qualquer motivo, as seções simplesmente ficam vazias com um
+  // aviso, sem quebrar o resto do site.
+  async function carregarVideosDoBanco(){
+    try{
+      const { data, error } = await window.supabaseClient
+        .from("videos")
+        .select("*")
+        .eq("visivel", true)
+        .order("ordem", { ascending:true });
+
+      if(!error && data){
+        highlights = data
+          .filter(function(v){ return v.destaque && v.destaque.trim() !== ""; })
+          .slice(0, 3)
+          .map(function(v){
+            return {
+              title: v.titulo,
+              context: v.marca ? ("Vídeo em parceria com " + v.marca + ".") : "Vídeo em destaque no portfólio.",
+              videoUrl: v.link || "#",
+              cover: v.titulo,
+              numberValue: v.destaque,
+              numberLabel: ""
+            };
+          });
+
+        works = data.map(function(v){
+          return {
+            title: v.titulo,
+            niche: v.nicho,
+            brand: v.marca,
+            format: v.formato || v.titulo,
+            link: v.link || "#"
+          };
+        });
+      }
+    }catch(e){
+      // sem conexão com o banco: as seções ficam vazias, com aviso, e o resto do site continua funcionando
+    }
+    renderHighlights();
+    renderFilters();
+    renderWorks();
+  }
+
   // Conteúdos de destaque
   function renderHighlights(){
     const grid = document.getElementById("highlightsGrid");
     grid.innerHTML = "";
+    if(!highlights.length){
+      grid.innerHTML = '<p class="section-sub">Quando um vídeo for marcado como destaque no painel, ele aparece aqui.</p>';
+      return;
+    }
     highlights.forEach(function(h){
       const card = el("a", "highlight-card reveal");
       card.href = h.videoUrl;
@@ -1325,6 +1355,12 @@
     const filtered = works.filter(function(w){
       return activeNiche === "todos" || w.niche === activeNiche;
     });
+    if(!filtered.length){
+      grid.innerHTML = works.length
+        ? '<p class="section-sub">Nenhum vídeo visível neste nicho ainda.</p>'
+        : '<p class="section-sub">Assim que um vídeo for cadastrado no painel, ele aparece aqui.</p>';
+      return;
+    }
     filtered.forEach(function(w){
       const card = el("a", "work-card");
       card.href = w.link;
@@ -1334,7 +1370,7 @@
           '<span>' + w.format + '</span>' +
         '</div>' +
         '<div class="work-body">' +
-          '<span class="work-niche">' + nicheLabels[w.niche] + '</span>' +
+          '<span class="work-niche">' + (nicheLabels[w.niche] || w.niche || "") + '</span>' +
           '<div class="work-title">' + w.title + '</div>' +
           '<div class="work-brand">' + w.brand + '</div>' +
         '</div>';
@@ -1527,16 +1563,57 @@
   function setupContactForm(){
     const form = document.getElementById("contactForm");
     const success = document.getElementById("formSuccess");
-    form.addEventListener("submit", function(e){
+    const erro = document.getElementById("formError");
+    const botao = form.querySelector("button[type=submit]");
+
+    form.addEventListener("submit", async function(e){
       e.preventDefault();
       if(!form.checkValidity()){
         form.reportValidity();
         return;
       }
-      form.classList.add("hidden");
-      success.classList.add("show");
-      form.reset();
+      if(erro) erro.classList.remove("show");
+      const textoOriginal = botao.textContent;
+      botao.disabled = true;
+      botao.textContent = "Enviando...";
+
+      const nome = document.getElementById("ctName").value.trim();
+      const email = document.getElementById("ctEmail").value.trim();
+      const mensagem = document.getElementById("ctMessage").value.trim();
+
+      try{
+        const { error: erroSupabase } = await window.supabaseClient.from("marcas").insert({
+          nome: nome,
+          email: email,
+          obs: mensagem,
+          situacao: "Lead"
+        });
+        if(erroSupabase) throw erroSupabase;
+
+        form.classList.add("hidden");
+        success.classList.add("show");
+        form.reset();
+      }catch(err){
+        if(erro){
+          erro.textContent = "Não consegui enviar agora. Tente de novo em instantes ou me chame direto pelo WhatsApp.";
+          erro.classList.add("show");
+        }
+        botao.disabled = false;
+        botao.textContent = textoOriginal;
+      }
     });
+  }
+
+  // Registro simples de visita, sem pedir nada pro visitante e sem serviço externo.
+  async function registrarVisita(){
+    try{
+      await window.supabaseClient.from("visitas").insert({
+        pagina: window.location.pathname,
+        origem: document.referrer || null
+      });
+    }catch(e){
+      // se não conseguir registrar, o site continua normalmente
+    }
   }
 
   /* =========================================================
@@ -1598,12 +1675,10 @@
   /* =========================================================
      INICIALIZAÇÃO
   ========================================================= */
-  document.addEventListener("DOMContentLoaded", function(){
+  document.addEventListener("DOMContentLoaded", async function(){
     renderBrands();
     renderHeroStats();
-    renderHighlights();
-    renderFilters();
-    renderWorks();
+    await carregarVideosDoBanco(); // busca no Supabase e já renderiza destaques + trabalhos
     renderServices();
     renderMetrics();
     renderCampaigns();
@@ -1616,6 +1691,8 @@
 
     setupReveal();
     setupCounters();
+
+    registrarVisita();
   });
 })();
 </script>
