@@ -421,7 +421,13 @@
     gap:56px;
     align-items:center;
   }
-  .about-photo{width:100%;}
+  .about-photo{
+    width:100%;
+    display:block;
+    border-radius:var(--radius-md);
+    object-fit:cover;
+    box-shadow:var(--shadow-sm);
+  }
   .about-text p{color:var(--ink-soft);font-size:1.05rem;}
   .about-text p + p{margin-top:14px;}
   .promise-list{
@@ -929,9 +935,8 @@
   <!-- ========== 2. SOBRE MIM ========== -->
   <section id="sobre" class="section">
     <div class="section-inner about-grid reveal">
-      <div class="about-photo media-placeholder ratio-45" role="img" aria-label="Foto de Isabela Maio, formato 4:5. Troque este bloco por uma imagem real.">
-        <span>foto da creator 4:5</span>
-      </div>
+      <img class="about-photo ratio-45" src="imagens/fotos/isabela-sobre.jpg" alt="Retrato de Isabela Maio em preto e branco, de blazer preto">
+
       <div class="about-text">
         <p class="eyebrow">Sobre mim</p>
         <h2>Prazer, eu sou a Isabela</h2>
