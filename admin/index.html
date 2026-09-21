@@ -549,6 +549,62 @@
     height:100%;color:var(--ink-soft);font-weight:700;font-size:.85rem;text-align:center;padding:20px;
   }
   .preview-sem-embed a{text-decoration:underline;}
+
+  /* ============ PLANEJAMENTO (KANBAN) ============ */
+  .p-emanalise{background:var(--accent-soft);color:#3a6b78;}
+  .section-explicacao{color:var(--ink-soft);font-size:.85rem;font-weight:600;margin-bottom:18px;max-width:60ch;}
+
+  .kanban{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:16px;
+    align-items:start;
+  }
+  @media (max-width:860px){
+    .kanban{grid-template-columns:1fr;}
+  }
+  .kanban-coluna{
+    background:var(--beige);
+    border-radius:var(--radius-lg);
+    padding:14px;
+    min-height:120px;
+  }
+  .kanban-coluna.arrastando-sobre{outline:2.5px dashed var(--accent-deep);outline-offset:-4px;}
+  .kanban-cabecalho{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:12px;padding:0 4px;
+  }
+  .kanban-titulo-coluna{display:flex;align-items:center;gap:8px;font-weight:800;font-size:.88rem;}
+  .kanban-contagem{
+    background:var(--card);border-radius:999px;padding:2px 9px;font-size:.72rem;font-weight:800;color:var(--ink-soft);
+  }
+  .kanban-add{
+    width:26px;height:26px;border-radius:50%;
+    background:var(--card);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;color:var(--ink-soft);
+  }
+  .kanban-add:hover{background:var(--accent);color:var(--ink);}
+  .kanban-cards{display:flex;flex-direction:column;gap:10px;min-height:40px;}
+  .kanban-card{
+    background:var(--card);
+    border-radius:var(--radius-md);
+    box-shadow:var(--shadow-sm);
+    padding:14px 14px;
+    cursor:grab;
+  }
+  .kanban-card:hover{box-shadow:var(--shadow-lg);}
+  .kanban-card.arrastando{opacity:.4;}
+  .kanban-card-titulo{font-weight:800;font-size:.86rem;margin-bottom:5px;}
+  .kanban-card-preview{font-size:.78rem;color:var(--ink-soft);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  .kanban-vazio{
+    border:1.5px dashed var(--line);
+    border-radius:var(--radius-md);
+    padding:16px;
+    text-align:center;
+    font-size:.78rem;
+    color:var(--ink-soft);
+    font-weight:600;
+  }
 </style>
 </head>
 <body>
@@ -571,6 +627,7 @@
         <button class="nav-item" data-aba="campanhas"></button>
         <button class="nav-item" data-aba="checklist"></button>
         <button class="nav-item" data-aba="transcricoes"></button>
+        <button class="nav-item" data-aba="planejamento"></button>
       </div>
     </nav>
     <div class="sidebar-rodape">
@@ -787,6 +844,13 @@
       </div>
     </section>
 
+    <!-- ================= ABA PLANEJAMENTO ================= -->
+    <section class="aba" id="aba-planejamento">
+      <div id="avisoPlanejamento"></div>
+      <p class="section-explicacao">Organize as ideias de conteúdo e desenvolva o roteiro de cada uma. Arraste o card pra mudar de coluna, ou troque o status direto dentro dele.</p>
+      <div class="kanban" id="kanbanPlanejamento"></div>
+    </section>
+
   </main>
 </div>
 
@@ -817,6 +881,7 @@
     campanhas: SVG_ABRE+'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5 7V5.2A1.7 1.7 0 0 1 10.2 3.5h3.6A1.7 1.7 0 0 1 15.5 5.2V7"/><line x1="3" y1="13" x2="21" y2="13"/></svg>',
     checklist: SVG_ABRE+'<rect x="3" y="3" width="18" height="18" rx="3"/><polyline points="7.5 12 10.3 15 16.5 8"/></svg>',
     transcricoes: SVG_ABRE+'<path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14.5 3v4.5H19"/><line x1="8" y1="12.5" x2="16" y2="12.5"/><line x1="8" y1="16" x2="16" y2="16"/></svg>',
+    planejamento: SVG_ABRE+'<rect x="3" y="4" width="18" height="16" rx="2"/><line x1="9" y1="4" x2="9" y2="20"/><line x1="15" y1="4" x2="15" y2="20"/><rect x="4.4" y="6.5" width="3.2" height="4" rx="0.6" fill="currentColor" stroke="none"/><rect x="10.4" y="6.5" width="3.2" height="6.5" rx="0.6" fill="currentColor" stroke="none"/><rect x="16.4" y="6.5" width="3.2" height="3" rx="0.6" fill="currentColor" stroke="none"/></svg>',
     busca: SVG_ABRE+'<circle cx="10.5" cy="10.5" r="6.5"/><line x1="20" y1="20" x2="15.3" y2="15.3"/></svg>',
     mais: SVG_ABRE+'<line x1="12" y1="4" x2="12" y2="20"/><line x1="4" y1="12" x2="20" y2="12"/></svg>',
     lixo: SVG_ABRE+'<path d="M4.5 7h15"/><path d="M9 7V4.5h6V7"/><path d="M6.5 7l1 12.5h9L17.5 7"/></svg>',
@@ -855,7 +920,8 @@
     buscaCampanhas: '',
     ordCampanhas: { coluna: 'prazo', asc: true },
     transcricoes: [],
-    buscaTranscricoes: ''
+    buscaTranscricoes: '',
+    planejamento: []
   };
 
   const NICHOS_SITE = { beleza:'Beleza', skincare:'Skincare', moda:'Moda', casa:'Casa e Decoração', tech:'Tech' };
@@ -935,7 +1001,8 @@
   /* =========================================================
      NAVEGAÇÃO LATERAL
   ========================================================= */
-  const TITULOS_ABA = { portfolio:'Portfólio', marcas:'Marcas', calendario:'Calendário', campanhas:'Campanhas', checklist:'Checklist Portfólio', transcricoes:'Transcrições' };
+  const TITULOS_ABA = { portfolio:'Portfólio', marcas:'Marcas', calendario:'Calendário', campanhas:'Campanhas', checklist:'Checklist Portfólio', transcricoes:'Transcrições', planejamento:'Planejamento' };
+  const STATUS_PLANEJAMENTO = ['Pendente', 'Em análise', 'Aprovado'];
 
   function montarSidebar(){
     document.querySelector('[data-aba="portfolio"]').innerHTML = ICONES.portfolio + '<span>Portfólio</span>';
@@ -944,6 +1011,7 @@
     document.querySelector('[data-aba="campanhas"]').innerHTML = ICONES.campanhas + '<span>Campanhas</span>';
     document.querySelector('[data-aba="checklist"]').innerHTML = ICONES.checklist + '<span>Checklist</span>';
     document.querySelector('[data-aba="transcricoes"]').innerHTML = ICONES.transcricoes + '<span>Transcrições</span>';
+    document.querySelector('[data-aba="planejamento"]').innerHTML = ICONES.planejamento + '<span>Planejamento</span>';
     document.getElementById('btnSair').innerHTML = ICONES.sair + '<span>Sair</span>';
     document.getElementById('btnMenuMobile').innerHTML = ICONES.menu;
     document.getElementById('btnNovoVideo').innerHTML = ICONES.mais + '<span>Novo vídeo</span>';
@@ -1971,6 +2039,130 @@
   }
 
   /* =========================================================
+     ABA PLANEJAMENTO (KANBAN)
+  ========================================================= */
+  async function carregarPlanejamento(){
+    limparAviso('avisoPlanejamento');
+    const r = await buscarLista('planejamento', 'ordem');
+    if(!r.ok){ mostrarAviso('avisoPlanejamento', 'Não consegui carregar o planejamento: ' + r.erro, 'erro'); }
+    state.planejamento = r.dados;
+    renderKanban();
+  }
+
+  function renderKanban(){
+    const container = document.getElementById('kanbanPlanejamento');
+    container.innerHTML = STATUS_PLANEJAMENTO.map(function(status){
+      const cards = state.planejamento
+        .filter(function(p){ return p.status === status; })
+        .sort(function(a,b){ return (a.ordem||0) - (b.ordem||0); });
+      return '<div class="kanban-coluna" data-status="'+escapeHtml(status)+'">' +
+        '<div class="kanban-cabecalho">' +
+          '<div class="kanban-titulo-coluna">'+escapeHtml(status)+' <span class="kanban-contagem">'+cards.length+'</span></div>' +
+          '<button class="kanban-add" data-status-add="'+escapeHtml(status)+'" aria-label="Novo card em '+escapeHtml(status)+'">'+ICONES.mais+'</button>' +
+        '</div>' +
+        '<div class="kanban-cards" data-status="'+escapeHtml(status)+'">' +
+          (cards.length ? cards.map(function(p){
+            return '<div class="kanban-card" draggable="true" data-id="'+p.id+'">' +
+              '<div class="kanban-card-titulo">'+escapeHtml(p.titulo)+'</div>' +
+              (p.roteiro ? '<div class="kanban-card-preview">'+escapeHtml(p.roteiro)+'</div>' : '') +
+            '</div>';
+          }).join('') : '<div class="kanban-vazio">Nenhum card aqui ainda.</div>') +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    container.querySelectorAll('.kanban-card').forEach(function(card){
+      card.addEventListener('click', function(){
+        abrirFormPlanejamento(state.planejamento.find(function(x){ return x.id === card.dataset.id; }));
+      });
+    });
+    container.querySelectorAll('[data-status-add]').forEach(function(b){
+      b.addEventListener('click', function(){ abrirFormPlanejamento(null, b.dataset.statusAdd); });
+    });
+    configurarArrastarKanban(container);
+  }
+
+  // Arrastar um card pra outra coluna muda o status dele (e ele vai
+  // pro fim da coluna nova). É a forma rápida de mudar status; a
+  // outra forma, sem precisar arrastar, é abrir o card e trocar no
+  // menu "Status" do formulário.
+  function configurarArrastarKanban(container){
+    let idArrastando = null;
+    container.querySelectorAll('.kanban-card').forEach(function(card){
+      card.addEventListener('dragstart', function(){
+        idArrastando = card.dataset.id;
+        card.classList.add('arrastando');
+      });
+      card.addEventListener('dragend', function(){ card.classList.remove('arrastando'); });
+    });
+    container.querySelectorAll('.kanban-coluna').forEach(function(coluna){
+      coluna.addEventListener('dragover', function(e){ e.preventDefault(); coluna.classList.add('arrastando-sobre'); });
+      coluna.addEventListener('dragleave', function(){ coluna.classList.remove('arrastando-sobre'); });
+      coluna.addEventListener('drop', async function(e){
+        e.preventDefault();
+        coluna.classList.remove('arrastando-sobre');
+        if(!idArrastando) return;
+        const novoStatus = coluna.dataset.status;
+        const item = state.planejamento.find(function(x){ return x.id === idArrastando; });
+        idArrastando = null;
+        if(!item) return;
+        const naColunaDestino = state.planejamento.filter(function(x){ return x.status === novoStatus && x.id !== item.id; });
+        item.status = novoStatus;
+        item.ordem = naColunaDestino.length;
+        renderKanban();
+        const r = await atualizar('planejamento', item.id, { status: novoStatus, ordem: item.ordem });
+        if(!r.ok){ mostrarAviso('avisoPlanejamento', 'Mudou na tela, mas não salvou no banco: ' + r.erro, 'erro'); }
+      });
+    });
+  }
+
+  function abrirFormPlanejamento(item, statusPadrao){
+    const editando = !!item;
+    const p = item || { titulo:'', roteiro:'', status: statusPadrao || STATUS_PLANEJAMENTO[0] };
+    const opcoesStatus = STATUS_PLANEJAMENTO.map(function(s){
+      return '<option value="'+s+'" '+(p.status===s?'selected':'')+'>'+s+'</option>';
+    }).join('');
+    abrirModal(editando ? 'Editar card' : 'Novo card',
+      '<form class="form-grade" id="formPlanejamento">' +
+        '<div class="campo"><label>Título</label><input type="text" name="titulo" value="'+escapeHtml(p.titulo)+'" required placeholder="Ideia do conteúdo"></div>' +
+        '<div class="campo"><label>Status</label><select name="status">'+opcoesStatus+'</select></div>' +
+        '<div class="campo"><label>Roteiro</label><textarea name="roteiro" style="min-height:220px;" placeholder="Desenvolva o roteiro deste conteúdo aqui...">'+escapeHtml(p.roteiro)+'</textarea></div>' +
+        '<div class="form-acoes">' +
+          '<button type="submit" class="btn btn-primario">Salvar</button>' +
+          (editando ? '<button type="button" class="btn btn-contorno" id="btnApagarPlanejamento">Apagar</button>' : '') +
+        '</div>' +
+      '</form>',
+      true
+    );
+    document.getElementById('formPlanejamento').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const novoStatus = fd.get('status');
+      const linha = { titulo: fd.get('titulo').trim(), roteiro: fd.get('roteiro').trim(), status: novoStatus };
+      if(!editando){
+        const naColuna = state.planejamento.filter(function(x){ return x.status === novoStatus; });
+        linha.ordem = naColuna.length;
+      }else if(item.status !== novoStatus){
+        const naColuna = state.planejamento.filter(function(x){ return x.status === novoStatus && x.id !== item.id; });
+        linha.ordem = naColuna.length;
+      }
+      const r = editando ? await atualizar('planejamento', p.id, linha) : await inserir('planejamento', linha);
+      if(!r.ok){ mostrarAviso('avisoPlanejamento', 'Não consegui salvar: ' + r.erro, 'erro'); return; }
+      fecharModal();
+      carregarPlanejamento();
+    });
+    if(editando){
+      document.getElementById('btnApagarPlanejamento').addEventListener('click', async function(){
+        if(!confirm('Apagar este card?')) return;
+        const r = await apagar('planejamento', p.id);
+        if(!r.ok){ mostrarAviso('avisoPlanejamento', 'Não consegui apagar: ' + r.erro, 'erro'); return; }
+        fecharModal();
+        carregarPlanejamento();
+      });
+    }
+  }
+
+  /* =========================================================
      LIGAÇÕES DE TELA (busca, filtros, botões, modal)
   ========================================================= */
   function ligarEventosGerais(){
@@ -2053,6 +2245,7 @@
     carregarCampanhas();
     carregarChecklist();
     carregarTranscricoes();
+    carregarPlanejamento();
   })();
 })();
 </script>

@@ -244,6 +244,32 @@ create policy "transcricoes_logada_tudo" on transcricoes
   with check (true);
 
 
+-- ------------------------------------------------------------
+-- BLOCO 8: tabela PLANEJAMENTO  (adicionado depois, na aba "Planejamento")
+-- O quadro kanban onde você desenvolve o roteiro dos conteúdos antes
+-- de gravar. "status" só pode ser um destes 3 valores, que são as
+-- colunas do quadro. "ordem" guarda a posição do card dentro da
+-- coluna, pra lembrar como você organizou ao arrastar.
+-- ------------------------------------------------------------
+create table planejamento (
+  id uuid primary key default gen_random_uuid(),
+  titulo text not null,
+  roteiro text,
+  status text not null default 'Pendente' check (status in ('Pendente', 'Em análise', 'Aprovado')),
+  ordem integer not null default 0,
+  criado_em timestamptz not null default now()
+);
+
+alter table planejamento enable row level security;
+
+-- Só quem está logada (você) pode ler, criar, editar e apagar
+create policy "planejamento_logada_tudo" on planejamento
+  for all
+  to authenticated
+  using (true)
+  with check (true);
+
+
 -- ============================================================
 -- FIM. Depois de rodar, veja no arquivo abaixo (ou na mensagem
 -- que a Claude te mandou) como conferir se a trava funcionou.
