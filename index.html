@@ -1199,6 +1199,18 @@
   ========================================================= */
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // Se a internet estiver lenta ou o banco não responder, isso evita
+  // que o site fique esperando pra sempre e trave o carregamento do
+  // resto da página. Depois desse tempo, desiste e segue em frente.
+  function comLimiteDeTempo(promessa, milissegundos){
+    return Promise.race([
+      promessa,
+      new Promise(function(resolve){
+        setTimeout(function(){ resolve({ data:null, error:new Error("tempo esgotado") }); }, milissegundos);
+      })
+    ]);
+  }
+
   /* =========================================================
      RENDERIZAÇÃO
   ========================================================= */
@@ -1223,11 +1235,14 @@
   // aviso, sem quebrar o resto do site.
   async function carregarVideosDoBanco(){
     try{
-      const { data, error } = await window.supabaseClient
-        .from("videos")
-        .select("*")
-        .eq("visivel", true)
-        .order("ordem", { ascending:true });
+      const { data, error } = await comLimiteDeTempo(
+        window.supabaseClient
+          .from("videos")
+          .select("*")
+          .eq("visivel", true)
+          .order("ordem", { ascending:true }),
+        5000
+      );
 
       if(!error && data){
         highlights = data
@@ -1544,12 +1559,15 @@
       const mensagem = document.getElementById("ctMessage").value.trim();
 
       try{
-        const { error: erroSupabase } = await window.supabaseClient.from("marcas").insert({
-          nome: nome,
-          email: email,
-          obs: mensagem,
-          situacao: "Lead"
-        });
+        const { error: erroSupabase } = await comLimiteDeTempo(
+          window.supabaseClient.from("marcas").insert({
+            nome: nome,
+            email: email,
+            obs: mensagem,
+            situacao: "Lead"
+          }),
+          8000
+        );
         if(erroSupabase) throw erroSupabase;
 
         form.classList.add("hidden");
@@ -1569,10 +1587,13 @@
   // Registro simples de visita, sem pedir nada pro visitante e sem serviço externo.
   async function registrarVisita(){
     try{
-      await window.supabaseClient.from("visitas").insert({
-        pagina: window.location.pathname,
-        origem: document.referrer || null
-      });
+      await comLimiteDeTempo(
+        window.supabaseClient.from("visitas").insert({
+          pagina: window.location.pathname,
+          origem: document.referrer || null
+        }),
+        8000
+      );
     }catch(e){
       // se não conseguir registrar, o site continua normalmente
     }
