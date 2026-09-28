@@ -88,6 +88,7 @@
 
   .lime-mark{
     background:linear-gradient(180deg, transparent 58%, var(--accent) 58%);
+    color:var(--ink);
     padding:0 4px;
     display:inline-block;
     transform:rotate(-1deg);
@@ -570,33 +571,72 @@
   }
 
   /* ====== SERVIÇOS ====== */
+  #servicos{background:var(--ink);}
+  #servicos .eyebrow{
+    background:rgba(255,255,255,.1);
+    border-color:rgba(255,255,255,.22);
+    color:#fff;
+  }
+  #servicos h2{color:#fff;}
+  #servicos .services-intro .section-sub{color:#e2d6cb;}
+  #servicos .services-intro .section-sub strong{color:#fff;}
+
+  .services-layout{
+    position:relative;
+    display:grid;
+    grid-template-columns:.85fr 1.15fr;
+    gap:48px;
+    align-items:start;
+  }
+  .services-intro .section-sub{margin-top:16px;}
   .services-grid{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:22px;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
   }
   .service-card{
     background:var(--card);
     border-radius:var(--radius-lg);
-    padding:28px 24px;
+    padding:26px 22px;
     box-shadow:var(--shadow-sm);
   }
-  .service-number{
-    font-size:.85rem;
+  .service-pill{
+    display:inline-block;
+    background:var(--accent);
+    color:var(--ink);
+    font-size:.78rem;
     font-weight:800;
-    color:var(--ink-soft);
-    background:var(--beige);
-    border:1px solid var(--line);
-    width:38px;height:38px;
-    border-radius:50%;
-    display:flex;align-items:center;justify-content:center;
-    margin-bottom:18px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    padding:7px 14px;
+    border-radius:999px;
+    margin-bottom:14px;
   }
-  .service-title{font-size:1.12rem;font-weight:800;}
-  .service-desc{margin-top:8px;color:var(--ink-soft);font-size:.92rem;}
+  .service-desc{color:var(--ink-soft);font-size:.92rem;}
+
+  /* Adesivos decorativos, no mesmo espírito dos elementos flutuantes da capa */
+  .services-deco{
+    position:absolute;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:var(--bg);
+    color:var(--ink);
+    font-weight:800;
+    font-size:.78rem;
+    padding:8px 14px;
+    border-radius:999px;
+    box-shadow:var(--shadow-lg);
+    white-space:nowrap;
+    z-index:2;
+  }
+  .deco-1{top:-20px;right:14%;left:auto;transform:rotate(-5deg);}
+  .deco-2{top:38%;right:-16px;transform:rotate(4deg);background:var(--accent);}
+  .deco-3{bottom:-16px;left:6%;transform:rotate(3deg);}
 
   @media (max-width:900px){
-    .services-grid{grid-template-columns:repeat(2,1fr);}
+    .services-layout{grid-template-columns:1fr;}
+    .services-deco{display:none;}
   }
   @media (max-width:560px){
     .services-grid{grid-template-columns:1fr;}
@@ -986,13 +1026,18 @@
   <!-- ========== 5. COMO EU TE AJUDO ========== -->
   <section id="servicos" class="section">
     <div class="section-inner">
-      <div class="section-head reveal">
-        <p class="eyebrow">Serviços</p>
-        <h2>Como eu te <span class="lime-mark">ajudo</span></h2>
-        <p class="section-sub">Formatos prontos para usar em anúncio, loja ou rede social.</p>
-      </div>
-      <div class="services-grid" id="servicesGrid">
-        <!-- Preenchido via JavaScript a partir do array services -->
+      <div class="services-layout reveal">
+        <span class="services-deco deco-1" aria-hidden="true">✨ Autêntico</span>
+        <span class="services-deco deco-2" aria-hidden="true">🎯 Estratégia</span>
+        <span class="services-deco deco-3" aria-hidden="true">🎬 Roteiro</span>
+        <div class="services-intro">
+          <p class="eyebrow">Serviços</p>
+          <h2>O que podemos <span class="lime-mark">criar juntos?</span></h2>
+          <p class="section-sub">Seja para <strong>vender mais, ganhar alcance ou fortalecer a marca,</strong> tem um <span class="lime-mark">formato</span> pensado pra isso. Me conta seu objetivo e a gente monta o combo ideal :)</p>
+        </div>
+        <div class="services-grid" id="servicesGrid">
+          <!-- Preenchido via JavaScript a partir do array services -->
+        </div>
       </div>
     </div>
   </section>
@@ -1161,14 +1206,12 @@
     tech:"Tech"
   };
 
-  // Seis serviços oferecidos
+  // Quatro serviços oferecidos
   const services = [
-    { title:"Vídeo UGC", desc:"Vídeo autêntico, roteirizado e gravado por mim, pronto para usar como anúncio ou publicação." },
-    { title:"Corte para anúncio", desc:"Edição objetiva do material bruto, cortado no formato e tempo ideais para rodar como anúncio pago." },
-    { title:"Fotos do produto", desc:"Ensaio de fotos com o seu produto, pensado para loja, site ou rede social." },
-    { title:"Unboxing", desc:"Vídeo mostrando a abertura e a primeira impressão do produto, do jeito que a audiência gosta de ver." },
-    { title:"Publicação no meu perfil", desc:"O conteúdo é gravado e publicado direto no meu perfil, alcançando a minha própria audiência." },
-    { title:"Pacote mensal", desc:"Um combo fechado de conteúdos entregues todo mês, para manter a marca sempre presente." }
+    { title:"Vídeo UGC", desc:"Vídeos autênticos, com roteiro e gravação feitos por mim, prontos para virar anúncio ou publicação nas suas redes." },
+    { title:"Criativos para anúncio", desc:"Ads pensados para converter no Meta, TikTok e YouTube, com gancho forte nos primeiros segundos." },
+    { title:"UGC para E-commerce", desc:"Vídeos demonstrativos que mostram o produto na prática e tiram as dúvidas de quem está prestes a comprar." },
+    { title:"Publicação no meu perfil", desc:"Conteúdo gravado e publicado direto no meu perfil, levando sua marca até a minha audiência." }
   ];
 
   // Métricas com contador animado. value numérico anima; placeholder:true mostra texto fixo.
@@ -1359,12 +1402,10 @@
   function renderServices(){
     const grid = document.getElementById("servicesGrid");
     grid.innerHTML = "";
-    services.forEach(function(s, i){
-      const num = String(i + 1).padStart(2, "0");
+    services.forEach(function(s){
       const card = el("div", "service-card");
       card.innerHTML =
-        '<div class="service-number">' + num + '</div>' +
-        '<div class="service-title">' + s.title + '</div>' +
+        '<span class="service-pill">' + s.title + '</span>' +
         '<p class="service-desc">' + s.desc + '</p>';
       grid.appendChild(card);
     });
