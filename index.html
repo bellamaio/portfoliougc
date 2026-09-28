@@ -413,7 +413,21 @@
     box-shadow:var(--shadow-sm);
   }
   .about-text p{color:var(--ink-soft);font-size:1.05rem;}
+  .about-text p strong{color:var(--ink);font-weight:800;}
   .about-text p + p{margin-top:14px;}
+  .about-badges{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 20px;}
+  .about-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:var(--beige);
+    border:1px solid var(--line);
+    padding:8px 16px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:.85rem;
+    color:var(--ink);
+  }
   .promise-list{
     margin-top:26px;
     display:flex;
@@ -931,9 +945,14 @@
 
       <div class="about-text">
         <p class="eyebrow">Sobre mim</p>
-        <h2>Prazer, eu sou a Isabela</h2>
-        <p>Eu moro em Blumenau e vivo criando conteúdo de verdade: aquele vídeo que parece feito por uma amiga, não por uma agência. Gosto de testar produto de verdade, contar o que gostei e o que mudaria, e entregar algo que a marca possa usar sem medo.</p>
-        <p>Trabalho com beleza, skincare, moda, casa e decoração e tech, sempre pensando no que faz a pessoa do outro lado parar de rolar o feed e prestar atenção.</p>
+        <h2>Oie, eu sou a Bella :)</h2>
+        <div class="about-badges">
+          <span class="about-badge">🤝 +20 marcas parceiras</span>
+          <span class="about-badge">📍 Blumenau - SC</span>
+        </div>
+        <p>Tenho <strong>28 anos,</strong> mais de 6 anos no marketing digital e um olhar que nunca desliga da estratégia de <strong>conteúdos que convertem.</strong></p>
+        <p>Passei anos nos bastidores de grandes criadores do digital, entendendo o que é um <span class="lime-mark">conteúdo autêntico</span> que faz alguém <strong>parar o scroll, confiar e comprar.</strong></p>
+        <p>Hoje aplico tudo isso em conteúdo de marcas: crio <strong>UGC e conteúdo para social commerce</strong> (TikTok Shop incluso) que transforma produto em desejo, e desejo em venda.</p>
         <ul class="promise-list">
           <li><span class="tick">✓</span> Roteiro aprovado antes de gravar</li>
           <li><span class="tick">✓</span> Uma rodada de ajuste inclusa</li>
