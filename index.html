@@ -1156,10 +1156,17 @@
     "Marca 07","Marca 08","Marca 09","Marca 10","Marca 11","Marca 12"
   ];
 
-  // Conteúdos de destaque e trabalhos por nicho agora vêm do banco de dados
-  // (tabela "videos", editada no painel admin). Começam vazios e são
-  // preenchidos pela função carregarVideosDoBanco().
-  let highlights = [];
+  // Conteúdos de destaque: fixos aqui no código (edite direto essa lista
+  // pra trocar título, link do YouTube ou o valor de GMV).
+  const highlights = [
+    { title:"Mini Bag Vintage", videoUrl:"https://youtube.com/shorts/lcYrTECRj5k?feature=share", numberValue:"+ R$12.300,00" },
+    { title:"Bota Montaria Lumiss", videoUrl:"https://youtube.com/shorts/uadkOIUF0zw?feature=share", numberValue:"+ R$7.000,00" },
+    { title:"Scarpin Rosavivi", videoUrl:"https://youtube.com/shorts/72yE-lT2Imw?feature=share", numberValue:"+ R$17.600" }
+  ];
+
+  // Trabalhos por nicho continuam vindo do banco de dados (tabela "videos",
+  // editada no painel admin). Começa vazio e é preenchido pela função
+  // carregarVideosDoBanco().
   let works = [];
 
   // Trabalhos por nicho. niche deve ser um dos valores de nicheLabels abaixo.
@@ -1230,20 +1237,6 @@
       );
 
       if(!error && data){
-        highlights = data
-          .filter(function(v){ return v.destaque && v.destaque.trim() !== ""; })
-          .slice(0, 3)
-          .map(function(v){
-            return {
-              title: v.titulo,
-              context: v.marca ? ("Vídeo em parceria com " + v.marca + ".") : "Vídeo em destaque no portfólio.",
-              videoUrl: v.link || "#",
-              cover: v.titulo,
-              numberValue: v.destaque,
-              numberLabel: ""
-            };
-          });
-
         works = data.map(function(v){
           return {
             title: v.titulo,
