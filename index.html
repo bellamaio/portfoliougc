@@ -459,10 +459,21 @@
   }
 
   /* ====== DESTAQUES ====== */
+  .destaques-tag{
+    font-style:italic;
+    font-weight:700;
+    font-size:1.2rem;
+    color:var(--ink-soft);
+    margin-top:6px;
+  }
   .highlights-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:26px;
+    display:flex;
+    gap:22px;
+    overflow-x:auto;
+    scroll-snap-type:x proximity;
+    padding:4px 4px 16px;
+    margin:0 -4px;
+    -webkit-overflow-scrolling:touch;
   }
   .highlight-card{
     background:var(--card);
@@ -471,6 +482,9 @@
     padding:16px;
     display:flex;
     flex-direction:column;
+    flex:none;
+    width:min(250px, 72vw);
+    scroll-snap-align:start;
     transition:transform .2s ease, box-shadow .2s ease;
   }
   .highlight-card:hover,
@@ -506,10 +520,6 @@
   }
   .highlight-title{margin-top:12px;font-size:1.08rem;font-weight:800;}
   .highlight-context{margin-top:6px;color:var(--ink-soft);font-size:.92rem;}
-
-  @media (max-width:900px){
-    .highlights-grid{grid-template-columns:1fr;}
-  }
 
   /* ====== TRABALHOS ====== */
   .filter-row{
@@ -915,9 +925,9 @@
   <section id="destaques" class="section">
     <div class="section-inner">
       <div class="section-head reveal">
-        <p class="eyebrow">Destaques</p>
-        <h2>Conteúdos de <span class="lime-mark">destaque</span></h2>
-        <p class="section-sub">Alguns dos vídeos que mais performaram para as marcas que já atendi.</p>
+        <h2>Os melhores <span class="lime-mark">resultados</span></h2>
+        <p class="destaques-tag">Social Commerce</p>
+        <p class="section-sub">Estes são os vídeos que <strong>mais geraram <span class="lime-mark">GMV</span> para as marcas</strong> no TikTok Shop. <strong>Orgânicos, simples e curtos,</strong> e é justamente por isso que convertem tanto. Não à toa, <strong>é o formato mais procurado pelas marcas hoje.</strong></p>
       </div>
       <div class="highlights-grid" id="highlightsGrid">
         <!-- Preenchido via JavaScript a partir do array highlights.
