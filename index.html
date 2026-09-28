@@ -492,7 +492,22 @@
     transform:translateY(-6px);
     box-shadow:var(--shadow-lg);
   }
-  .highlight-media{margin-bottom:16px;}
+  .highlight-title{font-size:1.02rem;font-weight:800;margin-bottom:12px;}
+  .highlight-media{
+    position:relative;
+    aspect-ratio:9/16;
+    border-radius:var(--radius-md);
+    overflow:hidden;
+    background:var(--beige);
+  }
+  .highlight-media img,
+  .highlight-media iframe{
+    width:100%;
+    height:100%;
+    display:block;
+    border:0;
+    object-fit:cover;
+  }
   .play-btn{
     position:absolute;
     inset:0;
@@ -500,26 +515,48 @@
     width:56px;height:56px;
     border-radius:50%;
     background:var(--accent);
+    border:none;
+    color:var(--ink);
+    cursor:pointer;
     display:flex;
     align-items:center;
     justify-content:center;
     font-size:1.1rem;
     box-shadow:0 10px 24px -8px rgba(0,0,0,.4);
+    transition:transform .15s ease;
   }
+  .play-btn:hover{transform:scale(1.08);}
   .highlight-number{
-    font-size:1.7rem;
+    margin-top:14px;
+    font-size:1.15rem;
     font-weight:800;
-    letter-spacing:-.02em;
+    letter-spacing:-.01em;
   }
-  .highlight-number-label{
-    font-size:.8rem;
-    color:var(--ink-soft);
-    font-weight:600;
-    text-transform:uppercase;
-    letter-spacing:.05em;
+
+  .highlights-carousel{position:relative;}
+  .carousel-arrow{
+    position:absolute;
+    top:calc(50% - 10px);
+    transform:translateY(-50%);
+    width:40px;height:40px;
+    border-radius:50%;
+    background:var(--card);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow-lg);
+    font-size:1.3rem;
+    line-height:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:3;
+    color:var(--ink);
   }
-  .highlight-title{margin-top:12px;font-size:1.08rem;font-weight:800;}
-  .highlight-context{margin-top:6px;color:var(--ink-soft);font-size:.92rem;}
+  .arrow-prev{left:-6px;}
+  .arrow-next{right:-6px;}
+  @media (max-width:640px){
+    .arrow-prev{left:2px;}
+    .arrow-next{right:2px;}
+  }
 
   /* ====== TRABALHOS ====== */
   .filter-row{
@@ -929,10 +966,14 @@
         <p class="destaques-tag">Social Commerce</p>
         <p class="section-sub">Estes são os vídeos que <strong>mais geraram <span class="lime-mark">GMV</span> para as marcas</strong> no TikTok Shop. <strong>Orgânicos, simples e curtos,</strong> e é justamente por isso que convertem tanto. Não à toa, <strong>é o formato mais procurado pelas marcas hoje.</strong></p>
       </div>
-      <div class="highlights-grid" id="highlightsGrid">
-        <!-- Preenchido via JavaScript a partir do array highlights.
-             videoUrl = link do vídeo (troque "#" pela URL real do post/reels)
-             cover = legenda da capa vertical 9:16 (troque o bloco media-placeholder por um <img> real) -->
+      <div class="highlights-carousel">
+        <button type="button" class="carousel-arrow arrow-prev" id="destaquesPrev" aria-label="Vídeo anterior">‹</button>
+        <div class="highlights-grid" id="highlightsGrid">
+          <!-- Preenchido via JavaScript a partir do array highlights.
+               videoUrl = link do vídeo do YouTube (toca direto na página, sem sair pro YouTube)
+               cover = legenda usada só quando o link não é do YouTube -->
+        </div>
+        <button type="button" class="carousel-arrow arrow-next" id="destaquesNext" aria-label="Próximo vídeo">›</button>
       </div>
     </div>
   </section>
@@ -1199,6 +1240,22 @@
   }
 
   // Conteúdos de destaque
+  // Pega o código do vídeo em qualquer formato de link do YouTube
+  // (vídeo normal, shorts ou link curto youtu.be), pra poder tocar
+  // ele direto na página em vez de abrir o YouTube.
+  function extrairIdYoutube(link){
+    if(!link) return null;
+    let m = link.match(/[?&]v=([^&]+)/);
+    if(m) return m[1];
+    m = link.match(/youtu\.be\/([^?&]+)/);
+    if(m) return m[1];
+    m = link.match(/youtube\.com\/shorts\/([^?&]+)/);
+    if(m) return m[1];
+    m = link.match(/youtube\.com\/embed\/([^?&]+)/);
+    if(m) return m[1];
+    return null;
+  }
+
   function renderHighlights(){
     const grid = document.getElementById("highlightsGrid");
     grid.innerHTML = "";
@@ -1207,24 +1264,43 @@
       return;
     }
     highlights.forEach(function(h){
-      const card = el("a", "highlight-card reveal");
-      card.href = h.videoUrl;
-      card.target = "_blank";
-      card.rel = "noopener";
-      card.setAttribute("aria-label", h.title + ", abrir vídeo");
+      const idYoutube = extrairIdYoutube(h.videoUrl);
+      const card = el("div", "highlight-card reveal");
       card.innerHTML =
-        '<div class="highlight-media" style="position:relative;">' +
-          '<div class="media-placeholder ratio-916" role="img" aria-label="' + h.cover + '. Troque por uma imagem ou vídeo real.">' +
-            '<span>' + h.cover + '</span>' +
-          '</div>' +
-          '<div class="play-btn" aria-hidden="true">▶</div>' +
-        '</div>' +
-        '<div class="highlight-number">' + h.numberValue + '</div>' +
-        '<div class="highlight-number-label">' + h.numberLabel + '</div>' +
         '<div class="highlight-title">' + h.title + '</div>' +
-        '<p class="highlight-context">' + h.context + '</p>';
+        '<div class="highlight-media" data-youtube-id="' + (idYoutube || "") + '">' +
+          (idYoutube
+            ? '<img src="https://img.youtube.com/vi/' + idYoutube + '/hqdefault.jpg" alt="Capa do vídeo ' + h.title + '" loading="lazy">'
+            : '<div class="media-placeholder ratio-916" role="img" aria-label="' + h.cover + '. Troque por uma imagem ou vídeo real."><span>' + h.cover + '</span></div>'
+          ) +
+          '<button type="button" class="play-btn" aria-label="Assistir ' + h.title + '">▶</button>' +
+        '</div>' +
+        '<div class="highlight-number">' + h.numberValue + '</div>';
       grid.appendChild(card);
     });
+
+    // Ao clicar no play, troca a capa por um player do YouTube que já
+    // começa tocando, sem sair do site.
+    grid.querySelectorAll(".highlight-media").forEach(function(media){
+      const botao = media.querySelector(".play-btn");
+      botao.addEventListener("click", function(){
+        const id = media.dataset.youtubeId;
+        if(!id) return;
+        media.innerHTML =
+          '<iframe src="https://www.youtube.com/embed/' + id + '?autoplay=1&rel=0" ' +
+          'title="Vídeo em destaque" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+      });
+    });
+
+    const trilho = document.getElementById("highlightsGrid");
+    const larguraRolagem = 272;
+    const prevBtn = document.getElementById("destaquesPrev");
+    const nextBtn = document.getElementById("destaquesNext");
+    if(prevBtn && !prevBtn.dataset.ligado){
+      prevBtn.dataset.ligado = "1";
+      prevBtn.addEventListener("click", function(){ trilho.scrollBy({ left: -larguraRolagem, behavior: prefersReducedMotion ? "auto" : "smooth" }); });
+      nextBtn.addEventListener("click", function(){ trilho.scrollBy({ left: larguraRolagem, behavior: prefersReducedMotion ? "auto" : "smooth" }); });
+    }
   }
 
   // Filtros de nicho + galeria de trabalhos
