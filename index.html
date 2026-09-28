@@ -224,35 +224,11 @@
     color:var(--ink-soft);
     max-width:46ch;
   }
-  .hero-assinatura{
-    margin-top:18px;
-    font-size:1.1rem;
-    font-weight:700;
-    font-style:italic;
-    color:var(--ink-soft);
-  }
   .hero-actions{
     display:flex;
     gap:14px;
     flex-wrap:wrap;
     margin-top:32px;
-  }
-  .hero-stats{
-    display:flex;
-    gap:34px;
-    margin-top:48px;
-    flex-wrap:wrap;
-  }
-  .hero-stat b{
-    display:block;
-    font-size:2rem;
-    font-weight:800;
-    letter-spacing:-.02em;
-  }
-  .hero-stat span{
-    font-size:.85rem;
-    color:var(--ink-soft);
-    font-weight:600;
   }
 
   /* ---- visual flutuante ---- */
@@ -904,13 +880,9 @@
       <div class="hero-text">
         <p class="eyebrow">UGC Creator &amp; estrategista de conteúdo</p>
         <h1 class="hero-title">Conteúdo com gente real <span class="lime-mark">vende mais</span>. Vamos provar isso com a sua marca?</h1>
-        <p class="hero-assinatura">Isabela Maio</p>
         <div class="hero-actions">
           <a href="#contato" class="btn btn-primary">Quero criar com a Bella</a>
           <a href="#trabalhos" class="btn btn-outline">Ver os trabalhos</a>
-        </div>
-        <div class="hero-stats" id="heroStats" aria-label="Números resumidos">
-          <!-- Preenchido via JavaScript a partir do array heroStats -->
         </div>
       </div>
 
@@ -1168,13 +1140,6 @@
     "Marca 07","Marca 08","Marca 09","Marca 10","Marca 11","Marca 12"
   ];
 
-  // Números curtos da capa
-  const heroStats = [
-    { value:100, suffix:"+", label:"vídeos entregues" },
-    { value:10,  suffix:"+", label:"marcas atendidas" },
-    { value:10,  suffix:"M+", label:"views somadas" }
-  ];
-
   // Conteúdos de destaque e trabalhos por nicho agora vêm do banco de dados
   // (tabela "videos", editada no painel admin). Começam vazios e são
   // preenchidos pela função carregarVideosDoBanco().
@@ -1243,23 +1208,6 @@
     const track = document.getElementById("brandTrack");
     const list = brands.concat(brands);
     track.innerHTML = list.map(function(b){ return "<span>" + b + "</span>"; }).join("");
-  }
-
-  // Números da capa
-  function renderHeroStats(){
-    const wrap = document.getElementById("heroStats");
-    wrap.innerHTML = "";
-    heroStats.forEach(function(stat){
-      const item = el("div", "hero-stat");
-      const b = el("b");
-      b.dataset.target = stat.value;
-      b.dataset.suffix = stat.suffix;
-      b.textContent = prefersReducedMotion ? (stat.value + stat.suffix) : ("0" + stat.suffix);
-      const span = el("span", null, stat.label);
-      item.appendChild(b);
-      item.appendChild(span);
-      wrap.appendChild(item);
-    });
   }
 
   // Busca os vídeos visíveis no banco de dados (Supabase) e monta os
@@ -1685,7 +1633,6 @@
   ========================================================= */
   document.addEventListener("DOMContentLoaded", async function(){
     renderBrands();
-    renderHeroStats();
     await carregarVideosDoBanco(); // busca no Supabase e já renderiza destaques + trabalhos
     renderServices();
     renderMetrics();
