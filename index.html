@@ -644,87 +644,6 @@
     .services-grid{grid-template-columns:1fr;}
   }
 
-  /* ====== NUMEROS E DEPOIMENTOS ====== */
-  .numbers-block{margin-bottom:64px;}
-  .metrics-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:20px;
-  }
-  .metric-card{
-    background:var(--card);
-    border-radius:var(--radius-md);
-    padding:26px 20px;
-    text-align:center;
-    box-shadow:var(--shadow-sm);
-  }
-  .metric-number{
-    font-size:2.3rem;
-    font-weight:800;
-    letter-spacing:-.02em;
-  }
-  .metric-label{
-    margin-top:6px;
-    font-size:.85rem;
-    color:var(--ink-soft);
-    font-weight:600;
-  }
-  .block-label{
-    font-weight:800;
-    font-size:1rem;
-    margin-bottom:18px;
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .block-label::after{
-    content:"";
-    flex:1;
-    height:1px;
-    background:var(--line);
-  }
-  .campaign-grid{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px;
-  }
-  .campaign-card{
-    background:var(--ink);
-    color:#fff;
-    border-radius:var(--radius-md);
-    padding:24px;
-  }
-  .campaign-brand{font-size:.82rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;}
-  .campaign-result{font-size:1.7rem;font-weight:800;margin-top:8px;}
-  .campaign-context{margin-top:10px;color:#d9c8bd;font-size:.88rem;}
-
-  .testimonials-grid{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:20px;
-  }
-  .testimonial-card{
-    background:var(--card);
-    border-radius:var(--radius-md);
-    padding:24px;
-    box-shadow:var(--shadow-sm);
-  }
-  .testimonial-quote{font-size:.98rem;color:var(--ink);}
-  .testimonial-quote::before{content:"\201C";}
-  .testimonial-quote::after{content:"\201D";}
-  .testimonial-author{
-    margin-top:14px;
-    font-weight:800;
-    font-size:.9rem;
-  }
-  .testimonial-company{color:var(--ink-soft);font-size:.82rem;font-weight:600;}
-
-  @media (max-width:900px){
-    .metrics-grid{grid-template-columns:repeat(2,1fr);}
-    .campaign-grid{grid-template-columns:1fr;}
-    .testimonials-grid{grid-template-columns:1fr;}
-  }
-
   /* ====== CONTATO ====== */
   .contact-grid{
     display:grid;
@@ -906,7 +825,6 @@
       <a href="#destaques">Destaques</a>
       <a href="#trabalhos">Trabalhos</a>
       <a href="#servicos">Serviços</a>
-      <a href="#numeros">Números</a>
       <a href="#contato">Contato</a>
     </nav>
     <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navMobile">☰</button>
@@ -916,7 +834,6 @@
     <a href="#destaques">Destaques</a>
     <a href="#trabalhos">Trabalhos</a>
     <a href="#servicos">Serviços</a>
-    <a href="#numeros">Números</a>
     <a href="#contato">Contato</a>
   </nav>
 </header>
@@ -1040,37 +957,6 @@
         </div>
         <div class="services-grid" id="servicesGrid">
           <!-- Preenchido via JavaScript a partir do array services -->
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== 6. NÚMEROS E DEPOIMENTOS ========== -->
-  <section id="numeros" class="section">
-    <div class="section-inner">
-      <div class="section-head reveal">
-        <p class="eyebrow">Resultados</p>
-        <h2>Números e <span class="lime-mark">depoimentos</span></h2>
-        <p class="section-sub">O que os números mostram e o que as marcas dizem sobre o trabalho.</p>
-      </div>
-
-      <div class="numbers-block reveal">
-        <div class="metrics-grid" id="metricsGrid">
-          <!-- Preenchido via JavaScript a partir do array metrics, com contador animado -->
-        </div>
-      </div>
-
-      <div class="numbers-block reveal">
-        <p class="block-label">Resultados de campanha</p>
-        <div class="campaign-grid" id="campaignGrid">
-          <!-- Preenchido via JavaScript a partir do array campaignResults -->
-        </div>
-      </div>
-
-      <div class="reveal">
-        <p class="block-label">O que dizem sobre o meu trabalho</p>
-        <div class="testimonials-grid" id="testimonialsGrid">
-          <!-- Preenchido via JavaScript a partir do array testimonials -->
         </div>
       </div>
     </div>
@@ -1215,29 +1101,6 @@
     { title:"Criativos para anúncio", desc:"Ads pensados para converter no Meta, TikTok e YouTube, com gancho forte nos primeiros segundos." },
     { title:"UGC para E-commerce", desc:"Vídeos demonstrativos que mostram o produto na prática e tiram as dúvidas de quem está prestes a comprar." },
     { title:"Publicação no meu perfil", desc:"Conteúdo gravado e publicado direto no meu perfil, levando sua marca até a minha audiência." }
-  ];
-
-  // Métricas com contador animado. value numérico anima; placeholder:true mostra texto fixo.
-  const metrics = [
-    { value:100, suffix:"+",  label:"vídeos entregues" },
-    { value:10,  suffix:"+",  label:"marcas atendidas" },
-    { value:10,  suffix:"M+", label:"views somadas" },
-    { placeholder:true, display:"000", label:"Nova métrica (edite aqui)" }
-  ];
-
-  // Resultados de campanha (3)
-  const campaignResults = [
-    { brand:"Marca 01", result:"+000% de alcance", context:"Descreva aqui o resultado real desta campanha." },
-    { brand:"Marca 02", result:"+000 vendas", context:"Descreva aqui o resultado real desta campanha." },
-    { brand:"Marca 03", result:"+000% de engajamento", context:"Descreva aqui o resultado real desta campanha." }
-  ];
-
-  // Depoimentos (4)
-  const testimonials = [
-    { name:"Cliente 01", company:"Empresa 01", quote:"Escreva aqui o depoimento real do cliente sobre o trabalho entregue." },
-    { name:"Cliente 02", company:"Empresa 02", quote:"Escreva aqui o depoimento real do cliente sobre o trabalho entregue." },
-    { name:"Cliente 03", company:"Empresa 03", quote:"Escreva aqui o depoimento real do cliente sobre o trabalho entregue." },
-    { name:"Cliente 04", company:"Empresa 04", quote:"Escreva aqui o depoimento real do cliente sobre o trabalho entregue." }
   ];
 
   /* =========================================================
@@ -1410,54 +1273,6 @@
       card.innerHTML =
         '<span class="service-pill">' + s.title + '</span>' +
         '<p class="service-desc">' + s.desc + '</p>';
-      grid.appendChild(card);
-    });
-  }
-
-  // Métricas com contador
-  function renderMetrics(){
-    const grid = document.getElementById("metricsGrid");
-    grid.innerHTML = "";
-    metrics.forEach(function(m){
-      const card = el("div", "metric-card");
-      if(m.placeholder){
-        card.innerHTML =
-          '<div class="metric-number">' + m.display + '</div>' +
-          '<div class="metric-label">' + m.label + '</div>';
-      } else {
-        const displayInitial = prefersReducedMotion ? (m.value + m.suffix) : ("0" + m.suffix);
-        card.innerHTML =
-          '<div class="metric-number" data-target="' + m.value + '" data-suffix="' + m.suffix + '">' + displayInitial + '</div>' +
-          '<div class="metric-label">' + m.label + '</div>';
-      }
-      grid.appendChild(card);
-    });
-  }
-
-  // Resultados de campanha
-  function renderCampaigns(){
-    const grid = document.getElementById("campaignGrid");
-    grid.innerHTML = "";
-    campaignResults.forEach(function(c){
-      const card = el("div", "campaign-card");
-      card.innerHTML =
-        '<div class="campaign-brand">' + c.brand + '</div>' +
-        '<div class="campaign-result">' + c.result + '</div>' +
-        '<p class="campaign-context">' + c.context + '</p>';
-      grid.appendChild(card);
-    });
-  }
-
-  // Depoimentos
-  function renderTestimonials(){
-    const grid = document.getElementById("testimonialsGrid");
-    grid.innerHTML = "";
-    testimonials.forEach(function(t){
-      const card = el("div", "testimonial-card");
-      card.innerHTML =
-        '<p class="testimonial-quote">' + t.quote + '</p>' +
-        '<div class="testimonial-author">' + t.name + '</div>' +
-        '<div class="testimonial-company">' + t.company + '</div>';
       grid.appendChild(card);
     });
   }
@@ -1706,9 +1521,6 @@
     renderBrands();
     await carregarVideosDoBanco(); // busca no Supabase e já renderiza destaques + trabalhos
     renderServices();
-    renderMetrics();
-    renderCampaigns();
-    renderTestimonials();
     renderContact();
 
     setupNav();
